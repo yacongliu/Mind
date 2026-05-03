@@ -12,3 +12,6 @@ https://yacongliu.github.io/Mind/%E8%A3%85%E5%A4%87%E5%88%B6%E9%80%A0%E8%A1%8C%E
 
 ### 电子高科技
 https://yacongliu.github.io/Mind/电子高科技行业深度分析报告.html
+
+### 生命科学
+https://yacongliu.github.io/Mind/生命科学行业深度分析报告.html
