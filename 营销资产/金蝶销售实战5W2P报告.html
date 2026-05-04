@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>金蝶销售实战5W2P报告——新销售/经理人行动指南</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f0f2f5;
+    color: #1a1a2e;
+    line-height: 1.8;
+  }
+  /* 顶栏 */
+  .header {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    padding: 60px 40px 50px;
+    text-align: center;
+    color: #fff;
+  }
+  .header h1 { font-size: 2.6em; font-weight: 700; letter-spacing: 2px; }
+  .header .subtitle {
+    margin-top: 12px;
+    font-size: 1.1em;
+    opacity: .8;
+    letter-spacing: 1px;
+  }
+  .header .meta {
+    margin-top: 20px;
+    font-size: .85em;
+    opacity: .6;
+  }
+
+  /* 容器 */
+  .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+
+  /* 导航索引 */
+  .index {
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px 35px;
+    margin-bottom: 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  }
+  .index h2 { font-size: 1.2em; margin-bottom: 16px; color: #302b63; }
+  .index-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 20px;
+  }
+  .index-grid a {
+    color: #555;
+    text-decoration: none;
+    font-size: .92em;
+    padding: 4px 0;
+    display: block;
+    border-bottom: 1px dashed #eee;
+  }
+  .index-grid a:hover { color: #302b63; }
+
+  /* 卡片 */
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 35px 35px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    border-left: 4px solid #302b63;
+  }
+  .card.why { border-left-color: #e74c3c; }
+  .card.what { border-left-color: #e67e22; }
+  .card.who { border-left-color: #3498db; }
+  .card.when { border-left-color: #2ecc71; }
+  .card.where { border-left-color: #9b59b6; }
+  .card.how { border-left-color: #1abc9c; }
+  .card.howmuch { border-left-color: #f39c12; }
+
+  .card h3 {
+    font-size: 1.5em;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .card h3 .tag {
+    display: inline-block;
+    font-size: .7em;
+    font-weight: 600;
+    padding: 2px 12px;
+    border-radius: 20px;
+    color: #fff;
+  }
+  .tag.why { background: #e74c3c; }
+  .tag.what { background: #e67e22; }
+  .tag.who { background: #3498db; }
+  .tag.when { background: #2ecc71; }
+  .tag.where { background: #9b59b6; }
+  .tag.how { background: #1abc9c; }
+  .tag.howmuch { background: #f39c12; }
+
+  .card p, .card li { font-size: .95em; color: #333; margin-bottom: 8px; }
+  .card ul, .card ol { padding-left: 22px; margin: 10px 0; }
+
+  /* 高亮框 */
+  .highlight {
+    background: #f8f9ff;
+    border-left: 4px solid #302b63;
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+  }
+  .highlight strong { color: #302b63; }
+  .highlight.tip { border-left-color: #2ecc71; background: #f0faf4; }
+  .highlight.warn { border-left-color: #e74c3c; background: #fef0ef; }
+
+  /* 表格 */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: .92em;
+  }
+  th, td {
+    border: 1px solid #e0e0e0;
+    padding: 10px 14px;
+    text-align: left;
+  }
+  th { background: #f5f5f8; font-weight: 600; color: #302b63; }
+  td { color: #444; }
+
+  /* 流程 */
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .flow-step {
+    background: #f5f5f8;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: .9em;
+    position: relative;
+  }
+  .flow-step::after {
+    content: "→";
+    margin-left: 10px;
+    color: #aaa;
+  }
+  .flow-step:last-child::after { content: ""; }
+
+  /* 关键公式 */
+  .formula {
+    background: linear-gradient(135deg, #302b63, #24243e);
+    color: #fff;
+    padding: 20px 25px;
+    border-radius: 10px;
+    text-align: center;
+    margin: 16px 0;
+    font-size: 1.3em;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  /* 清单 */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    padding: 6px 0 6px 30px;
+    position: relative;
+  }
+  .checklist li::before {
+    content: "☐";
+    position: absolute;
+    left: 0;
+    color: #302b63;
+    font-weight: 700;
+  }
+
+  /* 数据看板 */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .stat-box {
+    background: #f5f5f8;
+    padding: 18px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  .stat-box .num {
+    font-size: 2em;
+    font-weight: 700;
+    color: #302b63;
+  }
+  .stat-box .label {
+    font-size: .82em;
+    color: #888;
+    margin-top: 4px;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 40px;
+    color: #aaa;
+    font-size: .82em;
+  }
+
+  @media (max-width: 640px) {
+    .header h1 { font-size: 1.8em; }
+    .index-grid { grid-template-columns: 1fr; }
+    .card { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>金蝶销售实战 · 5W2P行动指南</h1>
+  <div class="subtitle">面向新销售 / 经理人的从零到赢单全流程作战手册</div>
+  <div class="meta">编写：聪哥（金蝶天津 客户成功业务部）| 2026年5月</div>
+</div>
+
+<div class="container">
+
+  <!-- 导航 -->
+  <div class="index">
+    <h2>📋 目录</h2>
+    <div class="index-grid">
+      <a href="#why">WHY — 为什么做销售？为什么选择金蝶？</a>
+      <a href="#what">WHAT — 我们的销售目标是什么？</a>
+      <a href="#who">WHO — 谁是我们的客户？谁是我们的对手？</a>
+      <a href="#when">WHEN — 打单的节奏是什么？</a>
+      <a href="#where">WHERE — 战场在哪里？</a>
+      <a href="#plan">PLAN — 作战计划是什么？</a>
+      <a href="#process">PROCESS — 行动流程是什么？</a>
+    </div>
+  </div>
+
+  <!-- ==================== WHY ==================== -->
+  <div class="card why" id="why">
+    <h3><span class="tag why">1</span> WHY — 为什么做销售？为什么选择金蝶？</h3>
+
+    <div class="highlight tip">
+      <strong>销售的本质：</strong>帮客户解决问题。你不是在卖软件，你是在帮企业降本增效、数字化转型、实现业务增长。签单是客户成功之后自然而然的结果。
+    </div>
+
+    <h4>一、销售这条路的底层认知</h4>
+    <ul>
+      <li><strong>销售不是求人，是帮助人。</strong> 客户需要数字化能力，你有金蝶的产品和经验。你是去帮他的，不是去求他的。</li>
+      <li><strong>销售是概率游戏。</strong> 并不是每个客户都会签，核心是保持足够的管道量。关注过程指标（拜访量、有效沟通量），结果自然会来。</li>
+      <li><strong>销售是能力积累。</strong> 每一次客户交流、每一次拒绝、每一次丢单复盘，都在累积你的专业度和判断力。三年后你会发现，没有一次见面是白费的。</li>
+    </ul>
+
+    <h4>二、为什么选择金蝶</h4>
+    <div class="stats">
+      <div class="stat-box"><div class="num">30年+</div><div class="label">企业服务经验</div></div>
+      <div class="stat-box"><div class="num">740万+</div><div class="label">企业客户</div></div>
+      <div class="stat-box"><div class="num">1/3</div><div class="label">中国500强选择</div></div>
+      <div class="stat-box"><div class="num">No.1</div><div class="label">中国SaaS ERM市场</div></div>
+    </div>
+    <ul>
+      <li><strong>产品够硬：</strong>从星空旗舰版、AI星空、星瀚到云之家、发票云、金蝶AI智能体，产品矩阵完整，能匹配企业从初创到上市的每一阶段需求。</li>
+      <li><strong>趋势够强：</strong>国产化替代 + 信创政策 + AI大爆发，三浪叠加，未来5年是金蝶的黄金期。</li>
+      <li><strong>平台够大：</strong>金蝶的品牌效应、行业案例库、总部资源，是你打单时随时能调用的弹药库。</li>
+      <li><strong>天津市场够有空间：</strong>天津国企多、制造业密集，数字化转型需求旺盛，而星空旗舰版、AI产品在天津还在破冰期——谁先占领，谁就拿到未来5年的红利。</li>
+    </ul>
+
+    <div class="highlight warn">
+      <strong>⚠️ 心态准备：</strong>前3个月大概率比较难——吃闭门羹、方案被否、丢单子、被客户挂电话，这些都是标配。关键是不崩心态：过程做到了，结果自然会来。
+    </div>
+  </div>
+
+  <!-- ==================== WHAT ==================== -->
+  <div class="card what" id="what">
+    <h3><span class="tag what">2</span> WHAT — 我们的销售目标是什么？</h3>
+
+    <h4>一、聪哥团队的年度总目标</h4>
+    <div class="stats">
+      <div class="stat-box"><div class="num">2100万</div><div class="label">2026年整体收款目标</div></div>
+    </div>
+    <table>
+      <tr><th>成员</th><th>目标金额</th><th>定位</th></tr>
+      <tr><td>张申</td><td>330万</td><td>续费主力</td></tr>
+      <tr><td>高明凤</td><td>194万</td><td>综合打单</td></tr>
+      <tr><td>刘振楠</td><td>193万</td><td>综合打单</td></tr>
+      <tr><td>王闯</td><td>25万</td><td>新人起步</td></tr>
+    </table>
+
+    <h4>二、我们的产品矩阵（卖什么）</h4>
+    <table>
+      <tr><th>产品线</th><th>典型客户</th><th>打法特点</th></tr>
+      <tr><td>星空旗舰版</td><td>中型制造/零售企业</td><td>标准化打法，快速交付，批量复制</td></tr>
+      <tr><td>AI星空 / 金蝶AI智能体</td><td>有AI转型需求的企业</td><td>先教育再转化，POC试点降低门槛</td></tr>
+      <tr><td>云之家</td><td>协同办公需求企业</td><td>低成本切入，后续增购空间大</td></tr>
+      <tr><td>发票云</td><td>财务合规需求企业</td><td>政策驱动，合规刚需</td></tr>
+      <tr><td>星瀚</td><td>大型集团企业</td><td>长周期大项目，铁三角作战</td></tr>
+    </table>
+
+    <h4>三、四种作战场景</h4>
+    <table>
+      <tr><th>场景</th><th>类型</th><th>核心逻辑</th></tr>
+      <tr><td>老客户续费</td><td>防守战</td><td>续费不是到期才做的事，而是全年经营的结果</td></tr>
+      <tr><td>老客户增购/升级</td><td>进攻战</td><td>增购机会藏在客户的业务变化里</td></tr>
+      <tr><td>新客户开拓</td><td>突围战</td><td>新客户打的不是产品，是信任和专业</td></tr>
+      <tr><td>AI产品破冰</td><td>教育战</td><td>AI卖的不是功能，是场景和可能性</td></tr>
+    </table>
+  </div>
+
+  <!-- ==================== WHO ==================== -->
+  <div class="card who" id="who">
+    <h3><span class="tag who">3</span> WHO — 谁是我们的客户？谁是我们的对手？</h3>
+
+    <h4>一、天津市场的核心客户群体</h4>
+    <div class="stats">
+      <div class="stat-box"><div class="num">百利装备集团</div><div class="label">聪哥重点客户</div></div>
+      <div class="stat-box"><div class="num">天津食品集团</div><div class="label">聪哥重点客户</div></div>
+      <div class="stat-box"><div class="num">天津机车公司</div><div class="label">数字化转型项目</div></div>
+      <div class="stat-box"><div class="num">丽滋卡尔</div><div class="label">AI合作方案</div></div>
+    </div>
+    <p>天津客户画像：国企集中（市国资委旗下企业）、制造业密集（装备制造/食品/医药/汽车零部件）、数字化进程加速但整体处于早期——这就意味着<strong>市场空间大但需要教育</strong>。</p>
+
+    <h4>二、客户决策角色地图</h4>
+    <p>每个客户内部都有五个关键角色，你必须要搞清楚：</p>
+    <table>
+      <tr><th>角色</th><th>特征</th><th>你要做的事</th></tr>
+      <tr><td>最终决策者（EB）</td><td>有预算审批权，一把手或分管副总</td><td>讲价值和ROI，不要讲功能</td></tr>
+      <tr><td>技术把关者（TB）</td><td>CIO、IT负责人、信息化主管</td><td>讲架构、讲安全、讲集成</td></tr>
+      <tr><td>业务负责人（UB）</td><td>实际用系统的部门负责人</td><td>讲场景、讲效率提升、讲业务痛点</td></tr>
+      <tr><td>内线（Coach）</td><td>愿意帮你的人，任何层级</td><td>提供信息、引荐、预警竞争动态</td></tr>
+      <tr><td>影响者</td><td>外部顾问、集团总部、行业专家</td><td>借力打力，必要时调用总部资源</td></tr>
+    </table>
+
+    <div class="highlight warn">
+      <strong>⚠️ 铁律：没有内线的单子，赢面不超过30%。</strong> 发展内线是第一优先级。见到最终决策者之前不要报价——在下面的人那里谈价格没有意义。
+    </div>
+
+    <h4>三、竞争对手与应对策略</h4>
+    <table>
+      <tr><th>竞对类型</th><th>典型打法</th><th>软肋</th><th>你的反制</th></tr>
+      <tr><td>用友</td><td>高层关系强，打集团化大平台概念</td><td>中端产品体验不如金蝶，AI案例少</td><td>用交付案例打他口碑，产品体验做对比</td></tr>
+      <tr><td>SAP/Oracle</td><td>国际品牌牌</td><td>贵、重、慢、本土化不够</td><td>打性价比、打信创、打快速上线</td></tr>
+      <tr><td>中小厂商/SaaS</td><td>价格牌、细分功能强</td><td>平台能力弱，无法支撑长期成长</td><td>打平台完整性、打长期服务、打扩展性</td></tr>
+    </table>
+  </div>
+
+  <!-- ==================== WHEN ==================== -->
+  <div class="card when" id="when">
+    <h3><span class="tag when">4</span> WHEN — 打单的节奏是什么？</h3>
+
+    <h4>一、项目全生命周期五阶段</h4>
+    <div class="formula">线索 → 需求 → 方案 → 商务 → 签约</div>
+    <table>
+      <tr><th>阶段</th><th>关键动作</th><th>里程碑标志</th></tr>
+      <tr><td>线索阶段</td><td>识别机会、初步接触、判断是否值得投入</td><td>客户愿意约正式会议</td></tr>
+      <tr><td>需求阶段</td><td>深度调研、拜访关键人、画权力地图</td><td>明确客户真实需求和预算范围</td></tr>
+      <tr><td>方案阶段</td><td>定制方案、技术交流、POC演示</td><td>客户认可方案，进入商务环节</td></tr>
+      <tr><td>商务阶段</td><td>报价、谈判、合同条款</td><td>达成商务共识</td></tr>
+      <tr><td>签约阶段</td><td>合同审批、签约、回款</td><td>合同签署，首款到账</td></tr>
+    </table>
+
+    <div class="highlight tip">
+      <strong>关键原则：每个阶段都要有明确的"下一步行动"。</strong> 如果一次拜访后没有约下一次，说明项目在停滞。
+    </div>
+
+    <h4>二、老客户续费的时间轴（防守要提前）</h4>
+    <div class="flow">
+      <span class="flow-step">到期前6个月：健康度评估</span>
+      <span class="flow-step">到期前4个月：高层拜访+业务回顾</span>
+      <span class="flow-step">到期前3个月：启动续费+探索增购</span>
+      <span class="flow-step">到期前1个月：密集跟进，找出卡点</span>
+    </div>
+
+    <h4>三、团队的每周作战节奏</h4>
+    <table>
+      <tr><th>时间</th><th>动作</th></tr>
+      <tr><td>周一</td><td>每周立会：定核心目标、确认重点客户推进计划</td></tr>
+      <tr><td>周三</td><td>进度检查：关键项目风险评估、资源协调</td></tr>
+      <tr><td>周五</td><td>复盘+下周计划：数据统计、问题提炼、策略调整</td></tr>
+    </table>
+  </div>
+
+  <!-- ==================== WHERE ==================== -->
+  <div class="card where" id="where">
+    <h3><span class="tag where">5</span> WHERE — 战场在哪里？</h3>
+
+    <h4>一、天津市场网格分析</h4>
+    <p>天津市场的打法不是撒网，是"网格化经营"——把行业和区域切成网格，精准打击。</p>
+
+    <table>
+      <tr><th>区域板块</th><th>重点行业</th><th>典型客户线索</th><th>打法建议</th></tr>
+      <tr><td>市区（和平/河西/南开）</td><td>集团总部、服务业、金融</td><td>国企总部、集团财务共享</td><td>高层拜访+行业沙龙</td></tr>
+      <tr><td>滨海新区</td><td>制造业、化工、医药</td><td>装备制造、制药企业</td><td>数字化转型诊断+案例驱动</td></tr>
+      <tr><td>西青/津南</td><td>电子、汽车零部件</td><td>中小型制造企业</td><td>成本效率切入+快速POC</td></tr>
+      <tr><td>武清/宝坻</td><td>食品、仓储物流</td><td>食品集团供应链、冷库</td><td>政策驱动+合规需求</td></tr>
+    </table>
+
+    <h4>二、聪哥的重点阵地</h4>
+    <ul>
+      <li><strong>天津百利装备集团</strong> — 国资大客户，星空旗舰版+AI布局</li>
+      <li><strong>天津食品集团</strong> — 食品行业标杆，供应链+财务方案</li>
+      <li><strong>天津机车车辆有限公司</strong> — 数字化转型平台项目（生产+供应链+财务），当前重点项目</li>
+      <li><strong>丽滋卡尔</strong> — AI合作方案推进，代表AI产品破冰方向</li>
+      <li><strong>松正动力</strong> — Q1端升云标杆，老客户升级可复制案例</li>
+    </ul>
+  </div>
+
+  <!-- ==================== PLAN ==================== -->
+  <div class="card" id="plan" style="border-left-color:#1abc9c;">
+    <h3><span class="tag" style="background:#1abc9c;">6</span> PLAN — 作战计划是什么？（四张必打牌）</h3>
+
+    <div class="formula">PLAN = 目标拆解 × 客户分层 × 资源排布 × 关键动作</div>
+
+    <h4>一、2100万目标拆解计划</h4>
+    <table>
+      <tr><th>来源</th><th>金额</th><th>打什么牌</th><th>时间节点</th></tr>
+      <tr><td>老客户续费</td><td>~742万</td><td>防守牌：提前6个月健康度评估，分层经营</td><td>Q1-Q4持续</td></tr>
+      <tr><td>老客户增购/升级</td><td>~500万</td><td>进攻牌：捕捉业务变化信号，松正动力做标杆</td><td>Q1-Q3重点</td></tr>
+      <tr><td>新客户开拓</td><td>~500万</td><td>突围牌：国资+制造业双线推进，网格化经营</td><td>Q2-Q4</td></tr>
+      <tr><td>AI产品破冰</td><td>~358万</td><td>教育牌：丽滋卡尔为标杆，POC降低门槛</td><td>Q2-Q4加速</td></tr>
+    </table>
+
+    <h4>二、客户分层经营计划</h4>
+    <table>
+      <tr><th>层级</th><th>特征</th><th>经营策略</th><th>负责人投入</th></tr>
+      <tr><td><strong>S级</strong> 战略客户</td><td>年贡献200万+，行业标杆</td><td>聪哥亲自盯，每两周高层拜访，定制方案</td><td>聪哥30%精力</td></tr>
+      <tr><td><strong>A级</strong> 重点客户</td><td>年贡献50-200万，有增购空间</td><td>客户经理+售前陪访，季度业务回顾</td><td>销售主力60%精力</td></tr>
+      <tr><td><strong>B级</strong> 成长客户</td><td>年贡献10-50万，有续费基础</td><td>定期回访，探索升级需求</td><td>销售30%精力</td></tr>
+      <tr><td><strong>C级</strong> 基础客户</td><td>年贡献10万以下</td><td>标准化服务+批量触达，活动维护</td><td>远程为主</td></tr>
+    </table>
+
+    <div class="highlight warn">
+      <strong>⚠️ 资源排布原则：</strong> S级客户必须聪哥亲自参与，不能完全交给新人。大单不讲概率，讲经营——投入到位了，客户自然感受到。
+    </div>
+
+    <h4>三、团队分工计划</h4>
+    <table>
+      <tr><th>角色</th><th>人选</th><th>主攻方向</th><th>Q2关键动作</th></tr>
+      <tr><td>总指挥</td><td>聪哥</td><td>S级客户攻坚+团队管理+资源协调</td><td>百利装备、食品集团高层拜访</td></tr>
+      <tr><td>续费主力</td><td>张申</td><td>老客户续费+健康度管理</td><td>完成Q2续费客户清单梳理</td></tr>
+      <tr><td>新客开拓</td><td>高明凤</td><td>新客户拜访+商机挖掘</td><td>完成网格区域首轮覆盖</td></tr>
+      <tr><td>新客开拓</td><td>刘振楠</td><td>新客户拜访+商机挖掘</td><td>完成网格区域首轮覆盖</td></tr>
+      <tr><td>新人成长</td><td>王闯</td><td>基础拜访量+跟学大项目</td><td>跟学聪哥机车项目</td></tr>
+    </table>
+
+    <h4>四、每周作战计划模板</h4>
+    <table>
+      <tr><th>时间</th><th>固定动作</th><th>产出</th></tr>
+      <tr><td>周一 上午</td><td>立会：定本周核心目标、确认重点客户推进节点</td><td>本周作战地图</td></tr>
+      <tr><td>周一至周四</td><td>客户拜访/方案推进/内线维护</td><td>每日拜访记录+进展更新</td></tr>
+      <tr><td>周五 下午</td><td>周复盘：数据统计、问题提炼、下周计划</td><td>周报+下周优先级排序</td></tr>
+    </table>
+
+    <div class="highlight tip">
+      <strong>💡 计划的核心：</strong>不是写出来好看的，是逼自己每个动作都有目标、每个客户都有策略。每周开干前花20分钟想清楚这周打什么牌、打谁、怎么打。
+    </div>
+  </div>
+
+  <!-- ==================== PROCESS ==================== -->
+  <div class="card" id="process" style="border-left-color:#f39c12;">
+    <h3><span class="tag" style="background:#f39c12;">7</span> PROCESS — 行动流程是什么？（从线索到回款的标准作业）</h3>
+
+    <div class="formula">线索 → 立项 → 需求 → 方案 → 商务 → 签约 → 回款</div>
+
+    <h4>一、标准化打单七步流程</h4>
+    <table>
+      <tr><th>步骤</th><th>做什么</th><th>交付物</th><th>关键检查点</th></tr>
+      <tr><td><strong>Step 1</strong> 线索捕获</td><td>行业动态、客户转介绍、活动邀约、老客户扩展</td><td>线索登记表</td><td>客户是否满足目标画像？</td></tr>
+      <tr><td><strong>Step 2</strong> 项目立项</td><td>初步调研+权力地图+赢面评估</td><td>项目作战地图</td><td>有内线吗？见到决策者了吗？</td></tr>
+      <tr><td><strong>Step 3</strong> 需求挖掘</td><td>SPIN提问+多角色访谈+痛点确认</td><td>需求分析文档</td><td>客户真痛点挖出来了？核心动机清楚？</td></tr>
+      <tr><td><strong>Step 4</strong> 方案定制</td><td>差异化方案+技术交流+POC演示</td><td>定制方案书</td><td>方案有壁垒吗？竞对难复制吗？</td></tr>
+      <tr><td><strong>Step 5</strong> 商务推进</td><td>报价+谈判+竞争应对+内线确认</td><td>报价单+合同初稿</td><td>决策链全部覆盖？竞对动向清楚？</td></tr>
+      <tr><td><strong>Step 6</strong> 签约回款</td><td>合同审批+签约仪式+首款到账</td><td>签署合同+回单</td><td>首款到账才算完</td></tr>
+      <tr><td><strong>Step 7</strong> 交付跟进</td><td>交接交付团队+参与启动会+持续经营</td><td>交付交接单</td><td>续费从签约这一刻就开始</td></tr>
+    </table>
+
+    <h4>二、每个阶段必须完成的检查清单</h4>
+    <p><strong>立项阶段（项目要不要打）：</strong></p>
+    <ul class="checklist">
+      <li>客户在目标画像内吗？（行业/规模/区域）</li>
+      <li>有预算信号吗？（预算已批/预算编制中/未提）</li>
+      <li>有决策时间表吗？紧迫度如何？（1-5分）</li>
+      <li>我们有差异化优势吗？（产品/方案/关系）</li>
+      <li>赢面评估分数（1-5分），低于2分建议放弃</li>
+    </ul>
+
+    <p style="margin-top:12px;"><strong>需求阶段（需求挖透了没有）：</strong></p>
+    <ul class="checklist">
+      <li>我见过最终决策者了吗？</li>
+      <li>我有内线吗？内线可靠吗？</li>
+      <li>客户的三层需求（表面/痛点/核心动机）都清楚了？</li>
+      <li>竞对在这个客户里的动作清楚吗？</li>
+      <li>拜访后有约好下一次吗？</li>
+    </ul>
+
+    <p style="margin-top:12px;"><strong>商务阶段（准备冲线）：</strong></p>
+    <ul class="checklist">
+      <li>所有决策角色都触达了吗？有反对者吗？怎么处理？</li>
+      <li>预算范围确认了吗？报价策略定了吗？</li>
+      <li>竞对的最新动态？他们的牌是什么？</li>
+      <li>客户有没有"现在就签"的理由？</li>
+      <li>内部资源（售前/方案/领导）协调好了吗？</li>
+    </ul>
+
+    <h4>三、丢单复盘流程（每丢一单必做）</h4>
+    <div class="flow">
+      <span class="flow-step">丢了哪一单？金额？</span>
+      <span class="flow-step">哪个关键人没搞定？</span>
+      <span class="flow-step">哪个环节出了问题？</span>
+      <span class="flow-step">竞对赢在哪？</span>
+      <span class="flow-step">如果重来会怎么做？</span>
+      <span class="flow-step">记入打单经验库</span>
+    </div>
+
+    <div class="highlight warn">
+      <strong>⚠️ 丢单复盘比赢单复盘更有价值：</strong> 很多人丢了就不愿意回头看。但你每丢一次，就问自己那三个问题，答案记下来。一年后你会发现——同样的错误不会再犯第二次，这就是成长。
+    </div>
+
+    <h4>四、项目健康度自评流程（每周五必填）</h4>
+    <table>
+      <tr><th>维度</th><th>分数(1-5)</th><th>判断标准</th></tr>
+      <tr><td>客户关系覆盖度</td><td>/5</td><td>关键角色都覆盖了吗？有内线吗？关系深度？</td></tr>
+      <tr><td>需求理解深度</td><td>/5</td><td>知道客户的真实痛点和核心动机吗？</td></tr>
+      <tr><td>方案匹配度</td><td>/5</td><td>方案有差异化吗？客户为什么选我们而不是竞对？</td></tr>
+      <tr><td>竞争优势</td><td>/5</td><td>竞对的策略清楚吗？我们有反制手段吗？</td></tr>
+      <tr><td>项目推进节奏</td><td>/5</td><td>有明确的下一步行动和时间节点吗？</td></tr>
+      <tr><td><strong>总分</strong></td><td><strong>/25</strong></td><td>≥20健康 / 15-20有风险 / <15危险</td></tr>
+    </table>
+
+    <div class="highlight tip">
+      <strong>💡 流程的价值：</strong> 销售不需要天赋，需要纪律。把流程走标准了——每个项目都立项、都画权力地图、都挖真痛点、都写差异化方案、都做复盘——你的赢单率不会低于50%。
+    </div>
+  </div>
+
+  <!-- 总结 -->
+  <div class="card" style="border-left:4px solid #302b63; background: #f8f5ff;">
+    <h3>🎯 最终寄语</h3>
+    <div class="highlight">
+      <p><strong>打单最大的心法，就是"以客户成功为中心"。</strong> 你不是在卖软件，你是在帮客户解决问题。当你真心帮客户成功的时候，签单只是自然而然的结果。</p>
+    </div>
+    <p style="margin-top:12px;">而你的独特成长路径是：<strong>不做话术型销售，做专家型顾问。</strong>用专业赢得信任，用洞察创造价值。这条路更难走，但走通了就是别人翻不过的壁垒。</p>
+
+    <div style="margin-top:20px; text-align:center; color:#999; font-size:.85em;">
+      聪哥·金蝶天津客户成功业务部 · 2026年5月
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  金蝶软件（中国）有限公司天津分公司 · 客户成功业务部<br>
+  本文档仅供内部培训使用
+</div>
+
+</body>
+</html>
