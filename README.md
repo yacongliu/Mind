@@ -30,3 +30,11 @@ https://yacongliu.github.io/Mind/行业研究/批发零售行业深度分析报�
 
 ### 1.9、现代服务行业
 https://yacongliu.github.io/Mind/行业研究/现代服务行业深度分析报告_金蝶.html
+
+## 营销资产
+
+### 5W2P
+https://yacongliu.github.io/Mind/营销资产/金蝶销售实战5W2P报告.html
+
+https://yacongliu.github.io/Mind/营销资产/营销经理人5W2P商机判断指南.html
+
