@@ -1,5 +1,5 @@
 # Mind
-思考，学习，沉淀
+营销思考，学习，沉淀
 
 
 ## 一、行业研究
@@ -38,3 +38,7 @@ https://yacongliu.github.io/Mind/营销资产/金蝶销售实战5W2P报告.html
 
 https://yacongliu.github.io/Mind/营销资产/营销经理人5W2P商机判断指南.html
 
+https://yacongliu.github.io/Mind/营销资产/金蝶销售实战5W2P商机判断指南.html
+
+### 2.2、SPIN
+https://yacongliu.github.io/Mind/营销资产/金蝶SPIN提问式销售法实战训练手册.html
