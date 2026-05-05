@@ -31,6 +31,9 @@ https://yacongliu.github.io/Mind/行业研究/批发零售行业深度分析报�
 ### 1.9、现代服务行业
 https://yacongliu.github.io/Mind/行业研究/现代服务行业深度分析报告_金蝶.html
 
+### 1.10、低空经济行业
+https://yacongliu.github.io/Mind/行业研究/低空经济行业深度分析报告_金蝶.html
+
 ## 二、营销资产
 
 ### 2.1、5W2P
