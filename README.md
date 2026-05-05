@@ -45,3 +45,12 @@ https://yacongliu.github.io/Mind/营销资产/金蝶销售实战5W2P商机判断
 
 ### 2.2、SPIN
 https://yacongliu.github.io/Mind/营销资产/金蝶SPIN提问式销售法实战训练手册.html
+
+
+## 三、客户情况
+
+### 3.1、朗誉机器人（沃尔德）
+https://yacongliu.github.io/Mind/客户情况/天津朗誉机器人有限公司_企业调研报告.html
+
+### 3.2、津玺
+https://yacongliu.github.io/Mind/客户情况/津玺集团有限公司_企业调研报告.html
