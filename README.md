@@ -54,3 +54,6 @@ https://yacongliu.github.io/Mind/客户情况/天津朗誉机器人有限公司_
 
 ### 3.2、津玺
 https://yacongliu.github.io/Mind/客户情况/津玺集团有限公司_企业调研报告.html
+
+### 3.2、天津电力机车
+https://yacongliu.github.io/Mind/客户情况/天津电力机车有限公司企业调研报告.html
