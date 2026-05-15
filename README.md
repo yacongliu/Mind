@@ -57,3 +57,6 @@ https://yacongliu.github.io/Mind/客户情况/津玺集团有限公司_企业调
 
 ### 3.2、天津电力机车
 https://yacongliu.github.io/Mind/客户情况/天津电力机车有限公司企业调研报告.html
+
+### 3.3、立联信
+https://yacongliu.github.io/Mind/客户情况/立联信企业洞察报告.html
