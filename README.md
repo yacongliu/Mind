@@ -55,11 +55,14 @@ https://yacongliu.github.io/Mind/客户情况/天津朗誉机器人有限公司_
 ### 3.2、津玺
 https://yacongliu.github.io/Mind/客户情况/津玺集团有限公司_企业调研报告.html
 
-### 3.2、天津电力机车
+### 3.3、天津电力机车
 https://yacongliu.github.io/Mind/客户情况/天津电力机车有限公司企业调研报告.html
 
-### 3.3、立联信
+### 3.4、立联信
 https://yacongliu.github.io/Mind/客户情况/立联信企业洞察报告.html
 
-### 3.3、天咨集团
+### 3.5、天咨集团
 https://yacongliu.github.io/Mind/客户情况/天咨集团企业洞察报告.html
+
+### 3.6、久日新材料
+https://yacongliu.github.io/Mind/客户情况/久日新材料企业360°画像.html
