@@ -66,3 +66,6 @@ https://yacongliu.github.io/Mind/客户情况/天咨集团企业洞察报告.htm
 
 ### 3.6、久日新材料
 https://yacongliu.github.io/Mind/客户情况/久日新材料企业360°画像.html
+
+### 3.7、北京慧图科技
+https://yacongliu.github.io/Mind/客户情况/北京慧图科技企业360°画像.html
