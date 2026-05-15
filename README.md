@@ -60,3 +60,6 @@ https://yacongliu.github.io/Mind/客户情况/天津电力机车有限公司企�
 
 ### 3.3、立联信
 https://yacongliu.github.io/Mind/客户情况/立联信企业洞察报告.html
+
+### 3.3、天咨集团
+https://yacongliu.github.io/Mind/客户情况/天咨集团企业洞察报告.html
