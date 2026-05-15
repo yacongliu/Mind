@@ -24,49 +24,66 @@
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
-      background: rgba(10,37,64,0.95);
+      background: linear-gradient(90deg, rgba(10,37,64,0.98) 0%, rgba(15,50,80,0.95) 100%);
       backdrop-filter: blur(12px);
       z-index: 1000;
-      padding: 0 24px;
-      height: 56px;
+      padding: 0 50px;
+      height: 60px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      border-bottom: 1px solid rgba(0,212,170,0.2);
     }
     nav .brand {
       color: #fff;
       font-weight: 700;
-      font-size: 15px;
+      font-size: 16px;
       letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    nav .brand span { color: var(--accent); }
+    nav .brand::before {
+      content: '◆';
+      color: var(--accent);
+      font-size: 10px;
+    }
+    nav .brand span { color: var(--accent); font-weight: 800; }
     nav ul {
       display: flex;
       list-style: none;
-      gap: 4px;
+      gap: 2px;
     }
     nav ul li a {
-      color: rgba(255,255,255,0.7);
+      color: #d4dce8;
       text-decoration: none;
       font-size: 13px;
-      padding: 6px 12px;
-      border-radius: 6px;
-      transition: all 0.2s;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 8px;
+      transition: all 0.25s;
+      position: relative;
     }
     nav ul li a:hover {
       color: #fff;
-      background: rgba(255,255,255,0.1);
+      background: rgba(0,212,170,0.15);
+    }
+    nav ul li a.active {
+      color: var(--accent);
+      background: rgba(0,212,170,0.12);
     }
     .section {
-      padding: 90px 24px 60px;
-      max-width: 1200px;
+      padding: 90px 50px 60px;
+      max-width: 1000px;
       margin: 0 auto;
     }
     .section.dark {
       background: var(--primary);
       color: #fff;
+      max-width: 1000px;
+      margin: 0 auto;
     }
-    .section.gray { background: var(--light); }
+    .section.gray { background: var(--light); max-width: 1000px; margin: 0 auto; }
     .section-label {
       font-size: 12px;
       font-weight: 600;
@@ -88,7 +105,7 @@
       margin-bottom: 40px;
       max-width: 600px;
     }
-    .section.dark .section-sub { color: rgba(255,255,255,0.6); }
+    .section.dark .section-sub { color: #a8b8c8; }
 
     /* Hero */
     #hero {
@@ -108,7 +125,7 @@
       inset: 0;
       background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     }
-    .hero-content { position: relative; z-index: 1; max-width: 800px; padding: 24px; }
+    .hero-content { position: relative; z-index: 1; max-width: 900px; padding: 24px 50px; }
     .hero-badge {
       display: inline-block;
       background: rgba(0,212,170,0.15);
@@ -169,7 +186,7 @@
       bottom: 32px;
       left: 50%;
       transform: translateX(-50%);
-      color: rgba(255,255,255,0.5);
+      color: rgba(255,255,255,0.7);
       font-size: 12px;
       text-align: center;
       animation: bounce 2s infinite;
@@ -299,7 +316,7 @@
       padding: 24px;
     }
     .risk-card .ri { font-size: 32px; margin-bottom: 12px; }
-    .risk-card h4 { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .risk-card h4 { font-size: 15px; font-weight: 700; color: #ffffff; margin-bottom: 8px; }
     .risk-card p { font-size: 13px; color: #cbd5e1; line-height: 1.7; }
 
     /* Opp cards */
@@ -406,25 +423,26 @@
 
     /* Summary */
     .summary-box {
-      background: rgba(0,212,170,0.06);
-      border: 2px solid rgba(0,212,170,0.3);
+      background: #fff;
+      border: 2px solid var(--accent);
       border-radius: 20px;
       padding: 40px;
       text-align: center;
       max-width: 800px;
       margin: 0 auto;
+      box-shadow: 0 8px 32px rgba(10,37,64,0.08);
     }
     .summary-box p {
-      font-size: 17px;
-      line-height: 1.8;
-      color: #e2e8f0;
+      font-size: 16px;
+      line-height: 1.9;
+      color: #334155;
     }
-    .summary-box strong { color: #5eead4; }
+    .summary-box strong { color: var(--accent); font-weight: 700; }
     .tags { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 24px; }
     .tag-item {
-      background: rgba(0,212,170,0.15);
+      background: rgba(0,212,170,0.1);
       border: 1px solid rgba(0,212,170,0.3);
-      color: var(--accent);
+      color: #00897b;
       font-size: 12px;
       font-weight: 600;
       padding: 5px 14px;
@@ -434,7 +452,7 @@
     /* Footer */
     footer {
       background: #060f1a;
-      color: rgba(255,255,255,0.4);
+      color: #8899aa;
       padding: 32px 24px;
       text-align: center;
       font-size: 12px;
@@ -455,10 +473,12 @@
     /* Responsive */
     @media (max-width: 768px) {
       nav ul { display: none; }
+      nav { padding: 0 20px; }
       .hero-stats { grid-template-columns: repeat(2, 1fr); }
+      .hero-content { padding: 24px 24px; }
       .chart-grid { grid-template-columns: 1fr; }
       .phase-list { grid-template-columns: 1fr; }
-      .section { padding: 80px 16px 40px; }
+      .section { padding: 80px 24px 40px; max-width: 100%; }
     }
   </style>
 </head>
@@ -466,15 +486,15 @@
 
 <!-- Navigation -->
 <nav>
-  <div class="brand"><span>金蝶</span> 智能体</div>
+  <div class="brand"><span>金蝶</span>AI</div>
   <ul>
     <li><a href="#hero">首页</a></li>
-    <li><a href="#profile">公司概况</a></li>
-    <li><a href="#industry">行业洞察</a></li>
-    <li><a href="#competitive">竞争格局</a></li>
-    <li><a href="#advantage">核心优势</a></li>
-    <li><a href="#risk">风险挑战</a></li>
-    <li><a href="#opportunity">发展机遇</a></li>
+    <li><a href="#profile">概况</a></li>
+    <li><a href="#industry">行业</a></li>
+    <li><a href="#competitive">竞争</a></li>
+    <li><a href="#advantage">优势</a></li>
+    <li><a href="#risk">风险</a></li>
+    <li><a href="#opportunity">机遇</a></li>
     <li><a href="#ai">AI赋能</a></li>
     <li><a href="#summary">总结</a></li>
   </ul>
@@ -733,7 +753,7 @@
 
 <!-- 风险挑战 -->
 <section id="risk" class="dark">
-  <div class="section-label reveal" style="color:rgba(255,255,255,0.5);">05 · 风险与挑战</div>
+  <div class="section-label reveal">05 · 风险与挑战</div>
   <h2 class="section-title reveal">四大结构性挑战<br>制约集团高质量发展</h2>
   <p class="section-sub reveal">市场竞争加剧、数字化冲击、利润率承压、人才结构性短缺是天咨集团面临的四大核心挑战。</p>
 
@@ -838,7 +858,7 @@
 
 <!-- AI赋能 -->
 <section id="ai" class="dark">
-  <div class="section-label reveal" style="color:rgba(255,255,255,0.5);">08 · AI / 数字化赋能</div>
+  <div class="section-label reveal">08 · AI / 数字化赋能</div>
   <h2 class="section-title reveal">金蝶智能体<br>赋能天咨集团数智化转型</h2>
   <p class="section-sub reveal">基于天咨集团业务特征和管理痛点，以下金蝶智能体组合可精准匹配其数字化转型需求。</p>
 
@@ -919,7 +939,7 @@
 </section>
 
 <!-- 总结 -->
-<section id="summary" class="dark">
+<section id="summary" class="gray">
   <div class="section-label reveal">09 · 战略总结</div>
   <h2 class="section-title reveal">天咨集团<br>站在数智化转型新起点</h2>
 
@@ -964,6 +984,20 @@
       e.preventDefault();
       const t = document.querySelector(a.getAttribute('href'));
       if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // Active nav on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav ul li a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => {
+      if (scrollY >= s.offsetTop - 80) cur = s.getAttribute('id');
+    });
+    navLinks.forEach(a => {
+      a.classList.remove('active');
+      if (a.getAttribute('href') === '#' + cur) a.classList.add('active');
     });
   });
 
