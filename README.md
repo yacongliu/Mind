@@ -71,3 +71,6 @@ https://yacongliu.github.io/Mind/客户情况/久日新材料企业360°画像.h
 https://yacongliu.github.io/Mind/客户情况/北京慧图科技企业360°画像.html
 
 https://yacongliu.github.io/Mind/客户情况/北京慧图科技企业洞察报告.html
+
+### 3.8、中航直升机
+https://yacongliu.github.io/Mind/客户情况/中航直升机企业洞察报告.html
