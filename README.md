@@ -50,6 +50,7 @@ https://yacongliu.github.io/Mind/营销资产/金蝶SPIN提问式销售法实战
 https://yacongliu.github.io/Mind/营销资产/金蝶客户成功服务指南.html
 
 
+## 三、客户情况
 
 ### 3.1、朗誉机器人（沃尔德）
 https://yacongliu.github.io/Mind/客户情况/天津朗誉机器人有限公司_企业调研报告.html
@@ -76,3 +77,6 @@ https://yacongliu.github.io/Mind/客户情况/北京慧图科技企业洞察报�
 
 ### 3.8、中航直升机
 https://yacongliu.github.io/Mind/客户情况/中航直升机企业洞察报告.html
+
+## 四、其他
+https://yacongliu.github.io/Mind/others/HMN_智慧项目看板方案优化设计_v2.html

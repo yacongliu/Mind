@@ -1,0 +1,2765 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HMN IT平台建设项目 · 智慧项目监管方案优化设计</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #2563EB;
+      --primary-light: #3B82F6;
+      --primary-dark: #1D4ED8;
+      --bg: #F0F4F8;
+      --bg-card: #FFFFFF;
+      --bg-dark: #0F172A;
+      --text: #1E293B;
+      --text-secondary: #64748B;
+      --text-light: #94A3B8;
+      --border: #E2E8F0;
+      --border-light: #F1F5F9;
+      --success: #10B981;
+      --success-bg: #ECFDF5;
+      --warning: #F59E0B;
+      --warning-bg: #FFFBEB;
+      --danger: #EF4444;
+      --danger-bg: #FEF2F2;
+      --info: #6366F1;
+      --info-bg: #EEF2FF;
+      --radius: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 50px -12px rgba(0, 0, 0, 0.15);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Navigation */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-light);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), #7C3AED);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .nav-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text);
+    }
+
+    .nav-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 4px;
+    }
+
+    .nav-links a {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+      padding: 5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 50%, rgba(37, 99, 235, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 70% 50%, rgba(124, 58, 237, 0.1) 0%, transparent 50%);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 6px 16px;
+      border-radius: 50px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .hero-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 1rem;
+      position: relative;
+      letter-spacing: -0.02em;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, #60A5FA, #A78BFA);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.6);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      position: relative;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      position: relative;
+      margin-top: 3rem;
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat .num {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .hero-stat .num span {
+      color: var(--success);
+    }
+
+    .hero-stat .label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 4px;
+    }
+
+    /* Section */
+    .section {
+      padding: 4rem 2rem;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .tag-blue {
+      background: var(--info-bg);
+      color: var(--info);
+    }
+
+    .tag-green {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .tag-amber {
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+
+    .tag-red {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .section-header h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .section-header p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      max-width: 700px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-header h3 {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    /* Feature Grid */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      padding: 1.5rem;
+    }
+
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 1rem;
+    }
+
+    .fi-blue {
+      background: var(--info-bg);
+      color: var(--info);
+    }
+
+    .fi-green {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .fi-amber {
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+
+    .fi-red {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .feature-card h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* Mockup Frame */
+    .mockup-frame {
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-xl);
+      border: 1px solid var(--border);
+    }
+
+    .mockup-bar {
+      background: var(--bg-dark);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mockup-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dot-r {
+      background: #EF4444;
+    }
+
+    .dot-y {
+      background: #F59E0B;
+    }
+
+    .dot-g {
+      background: #10B981;
+    }
+
+    .mockup-bar span {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 12px;
+      margin-left: 8px;
+    }
+
+    .mockup-content {
+      background: var(--bg-card);
+    }
+
+    /* Dashboard Mockup */
+    .dash-sidebar {
+      width: 220px;
+      background: var(--bg-dark);
+      color: #fff;
+      padding: 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .dash-sidebar-logo {
+      padding: 0 1.25rem 1.25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 1rem;
+    }
+
+    .dash-sidebar-logo h4 {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .dash-sidebar-logo p {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .dash-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 1.25rem;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .dash-nav-item:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .dash-nav-item.active {
+      color: #fff;
+      background: rgba(37, 99, 235, 0.2);
+      border-right: 3px solid var(--primary);
+    }
+
+    .dash-nav-item svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .dash-main {
+      flex: 1;
+      padding: 1.5rem;
+      background: var(--bg);
+      overflow-y: auto;
+    }
+
+    .dash-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dash-topbar h3 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .dash-topbar-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .dash-btn {
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dash-btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .dash-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .dash-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .dash-stat-card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      border: 1px solid var(--border-light);
+    }
+
+    .dash-stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dash-stat-num {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .dash-stat-change {
+      font-size: 11px;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .change-up {
+      color: var(--success);
+    }
+
+    .change-down {
+      color: var(--danger);
+    }
+
+    /* Progress Track */
+    .track {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      padding: 1rem 0;
+    }
+
+    .track-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      position: relative;
+    }
+
+    .track-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      z-index: 1;
+    }
+
+    .tc-done {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .tc-progress {
+      background: var(--warning);
+      color: #fff;
+      animation: pulse 2s infinite;
+    }
+
+    .tc-pending {
+      background: var(--border);
+      color: var(--text-light);
+    }
+
+    .tc-blocked {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+      }
+
+      50% {
+        box-shadow: 0 0 0 8px rgba(245, 158, 11, 0);
+      }
+    }
+
+    .track-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 8px;
+      text-align: center;
+      max-width: 80px;
+    }
+
+    .track-line {
+      position: absolute;
+      top: 18px;
+      left: calc(50% + 18px);
+      width: calc(100% - 36px);
+      height: 3px;
+      background: var(--border);
+      z-index: 0;
+    }
+
+    .track-line.done {
+      background: var(--success);
+    }
+
+    .track-line.progress {
+      background: linear-gradient(90deg, var(--success), var(--warning));
+    }
+
+    .track-info {
+      font-size: 10px;
+      color: var(--text-light);
+      margin-top: 2px;
+    }
+
+    /* Table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .data-table th {
+      text-align: left;
+      padding: 10px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--border-light);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .data-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .data-table tr:hover td {
+      background: var(--border-light);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      padding: 3px 10px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .sb-done {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .sb-progress {
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+
+    .sb-pending {
+      background: #F1F5F9;
+      color: var(--text-light);
+    }
+
+    .sb-danger {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    /* Progress Bar */
+    .progress-bar {
+      height: 6px;
+      background: var(--border-light);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.8s ease;
+    }
+
+    .pf-green {
+      background: var(--success);
+    }
+
+    .pf-amber {
+      background: var(--warning);
+    }
+
+    .pf-red {
+      background: var(--danger);
+    }
+
+    .pf-blue {
+      background: var(--primary);
+    }
+
+    /* Mobile Mockup */
+    .mobile-wrapper {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .phone-frame {
+      width: 300px;
+      background: var(--bg-dark);
+      border-radius: 32px;
+      padding: 12px;
+      box-shadow: var(--shadow-xl);
+    }
+
+    .phone-screen {
+      background: #fff;
+      border-radius: 24px;
+      overflow: hidden;
+      height: 560px;
+    }
+
+    .phone-notch {
+      width: 120px;
+      height: 24px;
+      background: var(--bg-dark);
+      border-radius: 0 0 16px 16px;
+      margin: 0 auto;
+    }
+
+    .phone-content {
+      padding: 0.75rem;
+      height: calc(100% - 24px);
+      overflow-y: auto;
+    }
+
+    .phone-header {
+      padding: 0.75rem;
+      text-align: center;
+    }
+
+    .phone-header h4 {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .phone-header p {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .phone-card {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px solid var(--border-light);
+    }
+
+    .phone-card-title {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .phone-mini-track {
+      display: flex;
+      gap: 4px;
+      margin: 8px 0;
+    }
+
+    .phone-mini-node {
+      flex: 1;
+      height: 4px;
+      border-radius: 2px;
+    }
+
+    /* Alert System */
+    .alert-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .alert-item {
+      display: flex;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid;
+      align-items: flex-start;
+    }
+
+    .alert-critical {
+      background: var(--danger-bg);
+      border-color: #FECACA;
+    }
+
+    .alert-warning {
+      background: var(--warning-bg);
+      border-color: #FDE68A;
+    }
+
+    .alert-info {
+      background: var(--info-bg);
+      border-color: #C7D2FE;
+    }
+
+    .alert-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .alert-body {
+      flex: 1;
+    }
+
+    .alert-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .alert-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .alert-time {
+      font-size: 11px;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    .alert-action {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      background: #fff;
+      border: 1px solid;
+      cursor: pointer;
+      white-space: nowrap;
+      align-self: center;
+    }
+
+    /* Large Screen */
+    .screen-bg {
+      background: linear-gradient(180deg, #020617 0%, #0F172A 100%);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .screen-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .screen-header h3 {
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .screen-header .time {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 12px;
+    }
+
+    .screen-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+    }
+
+    .screen-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
+    .screen-card h4 {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .screen-num {
+      font-size: 32px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .screen-num.green {
+      color: #34D399;
+    }
+
+    .screen-num.amber {
+      color: #FBBF24;
+    }
+
+    .screen-num.red {
+      color: #F87171;
+    }
+
+    .screen-num.blue {
+      color: #60A5FA;
+    }
+
+    .screen-sub {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4);
+      margin-top: 4px;
+    }
+
+    .screen-card-full {
+      grid-column: span 3;
+    }
+
+    .screen-track {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      padding: 6px 0;
+    }
+
+    .screen-track-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+    }
+
+    .screen-track-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .std-done {
+      background: #34D399;
+    }
+
+    .std-progress {
+      background: #FBBF24;
+      animation: pulse 2s infinite;
+    }
+
+    .std-pending {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .screen-track-line {
+      position: absolute;
+      top: 5px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .screen-track-label {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    /* Comparison Table */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .compare-table th {
+      padding: 14px 16px;
+      text-align: left;
+      font-weight: 600;
+      background: var(--bg);
+      border-bottom: 2px solid var(--border);
+    }
+
+    .compare-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .compare-highlight {
+      background: var(--success-bg);
+    }
+
+    /* Timeline */
+    .timeline {
+      display: flex;
+      gap: 0;
+      position: relative;
+      padding: 2rem 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--border);
+    }
+
+    .tl-item {
+      flex: 1;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tl-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      border: 3px solid #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .tl-dot.done {
+      background: var(--success);
+    }
+
+    .tl-dot.current {
+      background: var(--primary);
+      animation: pulse 2s infinite;
+    }
+
+    .tl-dot.future {
+      background: var(--border);
+    }
+
+    .tl-label {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .tl-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* Tabs */
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-item {
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      background: none;
+    }
+
+    .tab-item.active {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .tab-item:hover:not(.active) {
+      background: var(--border-light);
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* Animate */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--text-secondary);
+      font-size: 13px;
+      border-top: 1px solid var(--border-light);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+
+      .hero-stats {
+        gap: 1.5rem;
+      }
+
+      .dash-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .screen-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .screen-card-full {
+        grid-column: span 1;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .mobile-wrapper {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <div class="nav-logo">K</div>
+      <div>
+        <div class="nav-title">HMN IT平台建设项目</div>
+        <div class="nav-sub">智慧项目监管方案优化设计 v2.0</div>
+      </div>
+    </div>
+    <div class="nav-links">
+      <a href="#architecture">系统架构</a>
+      <a href="#display" class="active">展示优化</a>
+      <a href="#mobile">移动端</a>
+      <a href="#alert">预警监控</a>
+      <a href="#bigscreen">大屏看板</a>
+      <a href="#plan">实施规划</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>基于<span>金蝶苍穹平台定制</span>的智慧项目监管进度看板升级方案</h1>
+    <p>从被动查看到主动预警，从PC到移动端，从单项目跟踪到全局大屏监控，打造华海智慧项目管理数字化标杆</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">4<span>+</span></div>
+        <div class="label">核心功能模块</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">30<span>%</span></div>
+        <div class="label">管理效率提升</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">定时+实时</div>
+        <div class="label">数据同步能力</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 0: Architecture Diagram -->
+  <section class="section fade-in" id="architecture" style="background:#fff;padding:4rem 2rem;">
+    <div style="max-width:1280px;margin:0 auto;">
+      <div class="section-header">
+        <div class="section-tag" style="background:rgba(99,102,241,0.12);color:var(--info);">&#127959; 架构总览</div>
+        <h2>数据归集与展示架构</h2>
+        <p>星空系统数据归集 → 苍穹平台统一处理 → 多端展示，清晰的数据链路让系统间关系一目了然</p>
+      </div>
+
+      <!-- Architecture SVG Diagram -->
+      <div
+        style="background:linear-gradient(135deg,#F8FAFC,#EEF2FF);border-radius:var(--radius-xl);padding:2.5rem;margin-bottom:2rem;border:1px solid var(--border);">
+        <svg viewBox="0 0 1100 580" style="width:100%;height:auto;font-family:'Inter',-apple-system,sans-serif;"
+          xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <!-- Arrow marker -->
+            <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#2563EB" />
+            </marker>
+            <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#10B981" />
+            </marker>
+            <marker id="arrowAmber" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#F59E0B" />
+            </marker>
+            <marker id="arrowRed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+              <polygon points="0 0, 10 3.5, 0 7" fill="#EF4444" />
+            </marker>
+            <!-- Shadows -->
+            <filter id="shadow1" x="-5%" y="-5%" width="115%" height="115%">
+              <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="rgba(0,0,0,0.08)" />
+            </filter>
+            <filter id="shadow2" x="-5%" y="-5%" width="115%" height="115%">
+              <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="rgba(37,99,235,0.12)" />
+            </filter>
+            <!-- Gradients -->
+            <linearGradient id="gradK3" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#3B82F6" />
+              <stop offset="100%" style="stop-color:#1D4ED8" />
+            </linearGradient>
+            <linearGradient id="gradCosmic" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#7C3AED" />
+              <stop offset="100%" style="stop-color:#5B21B6" />
+            </linearGradient>
+            <linearGradient id="gradPC" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#10B981" />
+              <stop offset="100%" style="stop-color:#059669" />
+            </linearGradient>
+            <linearGradient id="gradMobile" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#F59E0B" />
+              <stop offset="100%" style="stop-color:#D97706" />
+            </linearGradient>
+            <linearGradient id="gradBig" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#EF4444" />
+              <stop offset="100%" style="stop-color:#DC2626" />
+            </linearGradient>
+          </defs>
+
+          <!-- ===== Layer 1: K3 Cloud 数据源 ===== -->
+          <g>
+            <!-- Main container -->
+            <rect x="30" y="30" width="320" height="520" rx="16" fill="white" stroke="#DBEAFE" stroke-width="2"
+              filter="url(#shadow1)" />
+            <!-- Header -->
+            <rect x="30" y="30" width="320" height="56" rx="16" fill="url(#gradK3)" />
+            <rect x="30" y="60" width="320" height="26" fill="url(#gradK3)" />
+            <text x="190" y="65" text-anchor="middle" fill="white" font-size="16" font-weight="700">&#128230; 星空系统（K/3
+              Cloud）</text>
+            <text x="190" y="82" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="11">数据源 · 业务单据产生地</text>
+
+            <!-- Sub-modules -->
+            <g>
+              <rect x="55" y="108" width="270" height="52" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1" />
+              <text x="75" y="130" fill="#1E40AF" font-size="12" font-weight="600">&#128196; 项目管理</text>
+              <text x="75" y="148" fill="#64748B" font-size="10">售前→立项→计划→主/子项目→验收</text>
+            </g>
+            <g>
+              <rect x="55" y="172" width="270" height="52" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1" />
+              <text x="75" y="194" fill="#1E40AF" font-size="12" font-weight="600">&#128722; 设备采购</text>
+              <text x="75" y="212" fill="#64748B" font-size="10">采购申请→采购订单→入库→应付→付款</text>
+            </g>
+            <g>
+              <rect x="55" y="236" width="270" height="52" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1" />
+              <text x="75" y="258" fill="#1E40AF" font-size="12" font-weight="600">&#128188; 服务采购</text>
+              <text x="75" y="276" fill="#64748B" font-size="10">分包合同→进度验收→工时填报→付款</text>
+            </g>
+            <g>
+              <rect x="55" y="300" width="270" height="52" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1" />
+              <text x="75" y="322" fill="#1E40AF" font-size="12" font-weight="600">&#128666; 进出口物流</text>
+              <text x="75" y="340" fill="#64748B" font-size="10">进口合同→报关→检验→发货/储运</text>
+            </g>
+            <g>
+              <rect x="55" y="364" width="270" height="52" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1" />
+              <text x="75" y="386" fill="#1E40AF" font-size="12" font-weight="600">&#128178; 合同收款</text>
+              <text x="75" y="404" fill="#64748B" font-size="10">BOQ→销售订单→收款→财务应收</text>
+            </g>
+            <g>
+              <rect x="55" y="428" width="270" height="52" rx="10" fill="#FFF7ED" stroke="#FED7AA" stroke-width="1" />
+              <text x="75" y="450" fill="#9A3412" font-size="12" font-weight="600">&#128260; CV变更记录</text>
+              <text x="75" y="468" fill="#64748B" font-size="10">采购合同版本变更 → 原数量/现数量/差异</text>
+            </g>
+            <!-- Data extraction note -->
+            <rect x="55" y="496" width="270" height="36" rx="8" fill="#F0FDF4" stroke="#BBF7D0" stroke-width="1" />
+            <text x="190" y="519" text-anchor="middle" fill="#166534" font-size="11" font-weight="600">&#9889; 定时抽取 +
+              手动触发（2h/次）</text>
+          </g>
+
+          <!-- ===== Arrow: K3 → Cosmic ===== -->
+          <g>
+            <!-- Data flow arrow -->
+            <line x1="350" y1="290" x2="420" y2="290" stroke="#2563EB" stroke-width="3" marker-end="url(#arrowBlue)"
+              stroke-dasharray="8,4" />
+            <!-- Label -->
+            <rect x="358" y="248" width="80" height="32" rx="6" fill="#2563EB" />
+            <text x="398" y="261" text-anchor="middle" fill="white" font-size="9" font-weight="600">数据归集</text>
+            <text x="398" y="274" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="8">API/中间表</text>
+            <!-- Data items flowing -->
+            <text x="398" y="308" text-anchor="middle" fill="#2563EB" font-size="9" font-weight="500">单据状态</text>
+            <text x="398" y="322" text-anchor="middle" fill="#2563EB" font-size="9" font-weight="500">金额数量</text>
+            <text x="398" y="336" text-anchor="middle" fill="#2563EB" font-size="9" font-weight="500">变更记录</text>
+          </g>
+
+          <!-- ===== Layer 2: Cosmic Platform ===== -->
+          <g>
+            <!-- Main container -->
+            <rect x="430" y="30" width="260" height="520" rx="16" fill="white" stroke="#E9D5FF" stroke-width="2"
+              filter="url(#shadow2)" />
+            <!-- Header -->
+            <rect x="430" y="30" width="260" height="56" rx="16" fill="url(#gradCosmic)" />
+            <rect x="430" y="60" width="260" height="26" fill="url(#gradCosmic)" />
+            <text x="560" y="65" text-anchor="middle" fill="white" font-size="16" font-weight="700">&#9729; 苍穹平台</text>
+            <text x="560" y="82" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="11">开发平台 ·
+              数据处理与界面渲染</text>
+
+            <!-- Processing modules -->
+            <g>
+              <rect x="455" y="108" width="210" height="56" rx="10" fill="#FAF5FF" stroke="#E9D5FF" stroke-width="1" />
+              <text x="475" y="130" fill="#6B21A8" font-size="12" font-weight="600">&#128295; 数据加工引擎</text>
+              <text x="475" y="148" fill="#64748B" font-size="10">进度计算 / 状态判定 / 健康度评分</text>
+            </g>
+            <g>
+              <rect x="455" y="178" width="210" height="56" rx="10" fill="#FAF5FF" stroke="#E9D5FF" stroke-width="1" />
+              <text x="475" y="200" fill="#6B21A8" font-size="12" font-weight="600">&#9888; 预警规则引擎</text>
+              <text x="475" y="218" fill="#64748B" font-size="10">超期/滞留/CV变更/金额异常</text>
+            </g>
+            <g>
+              <rect x="455" y="248" width="210" height="56" rx="10" fill="#FAF5FF" stroke="#E9D5FF" stroke-width="1" />
+              <text x="475" y="270" fill="#6B21A8" font-size="12" font-weight="600">&#128202; 聚合分析服务</text>
+              <text x="475" y="288" fill="#64748B" font-size="10">供应商维度 / 项目维度 / 时间维度</text>
+            </g>
+            <g>
+              <rect x="455" y="318" width="210" height="56" rx="10" fill="#FAF5FF" stroke="#E9D5FF" stroke-width="1" />
+              <text x="475" y="340" fill="#6B21A8" font-size="12" font-weight="600">&#128274; 权限与角色</text>
+              <text x="475" y="358" fill="#64748B" font-size="10">项目经理 / 采购 / 财务 / 领导</text>
+            </g>
+
+            <!-- Tech stack note -->
+            <rect x="455" y="394" width="210" height="56" rx="10" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"
+              stroke-dasharray="4,3" />
+            <text x="475" y="414" fill="#7C3AED" font-size="11" font-weight="600">&#128736; 苍穹开发框架</text>
+            <text x="475" y="432" fill="#64748B" font-size="10">低代码 + 自定义组件 + 扩展模型</text>
+
+            <!-- Core advantage -->
+            <rect x="455" y="468" width="210" height="60" rx="10" fill="#7C3AED" opacity="0.08" />
+            <rect x="455" y="468" width="210" height="60" rx="10" fill="none" stroke="#7C3AED" stroke-width="1.5" />
+            <text x="560" y="492" text-anchor="middle" fill="#6B21A8" font-size="11" font-weight="700">&#11088;
+              核心优势</text>
+            <text x="560" y="510" text-anchor="middle" fill="#7C3AED" font-size="10">统一开发·灵活扩展·多端适配</text>
+          </g>
+
+          <!-- ===== Arrows: Cosmic → 3 Display Channels ===== -->
+          <g>
+            <!-- Arrow to PC -->
+            <path d="M690,180 C720,180 730,140 760,140" stroke="#10B981" stroke-width="2.5" fill="none"
+              marker-end="url(#arrowGreen)" stroke-dasharray="6,3" />
+            <!-- Arrow to Mobile -->
+            <path d="M690,290 L760,290" stroke="#F59E0B" stroke-width="2.5" fill="none" marker-end="url(#arrowAmber)"
+              stroke-dasharray="6,3" />
+            <!-- Arrow to BigScreen -->
+            <path d="M690,400 C720,400 730,440 760,440" stroke="#EF4444" stroke-width="2.5" fill="none"
+              marker-end="url(#arrowRed)" stroke-dasharray="6,3" />
+          </g>
+
+          <!-- ===== Layer 3: Display Channels ===== -->
+          <g>
+            <!-- Channel 1: PC -->
+            <rect x="770" y="90" width="300" height="120" rx="14" fill="white" stroke="#A7F3D0" stroke-width="2"
+              filter="url(#shadow1)" />
+            <rect x="770" y="90" width="300" height="38" rx="14" fill="url(#gradPC)" />
+            <rect x="770" y="112" width="300" height="16" fill="url(#gradPC)" />
+            <text x="920" y="115" text-anchor="middle" fill="white" font-size="13" font-weight="700">&#127760;
+              PC端看板界面</text>
+            <text x="795" y="152" fill="#065F46" font-size="11" font-weight="600">● 轨道图进度视图（按流程阶段可视化）</text>
+            <text x="795" y="170" fill="#065F46" font-size="11" font-weight="600">● 列表视图（多维度字段+排序筛选）</text>
+            <text x="795" y="188" fill="#065F46" font-size="11" font-weight="600">● 供应商视角</text>
+
+            <!-- Channel 2: Mobile -->
+            <rect x="770" y="232" width="300" height="120" rx="14" fill="white" stroke="#FDE68A" stroke-width="2"
+              filter="url(#shadow1)" />
+            <rect x="770" y="232" width="300" height="38" rx="14" fill="url(#gradMobile)" />
+            <rect x="770" y="254" width="300" height="16" fill="url(#gradMobile)" />
+            <text x="920" y="257" text-anchor="middle" fill="white" font-size="13" font-weight="700">&#128241;
+              移动端轻量应用</text>
+            <text x="795" y="294" fill="#92400E" font-size="11" font-weight="600">● 项目速览卡片（进度/预警/金额）</text>
+            <text x="795" y="312" fill="#92400E" font-size="11" font-weight="600">● 审批处理（采购/付款一键操作）</text>
+            <text x="795" y="330" fill="#92400E" font-size="11" font-weight="600">● WeLink/消息推送集成</text>
+
+            <!-- Channel 3: Big Screen -->
+            <rect x="770" y="374" width="300" height="120" rx="14" fill="white" stroke="#FECACA" stroke-width="2"
+              filter="url(#shadow1)" />
+            <rect x="770" y="374" width="300" height="38" rx="14" fill="url(#gradBig)" />
+            <rect x="770" y="396" width="300" height="16" fill="url(#gradBig)" />
+            <text x="920" y="399" text-anchor="middle" fill="white" font-size="13" font-weight="700">&#128250;
+              大屏指挥看板</text>
+            <text x="795" y="436" fill="#991B1B" font-size="11" font-weight="600">● 全局项目态势（健康度+执行率）</text>
+            <!-- <text x="795" y="454" fill="#991B1B" font-size="11" font-weight="600">● 供应商执行率聚合+CV动态</text> -->
+            <text x="795" y="472" fill="#991B1B" font-size="11" font-weight="600">● 实时预警滚动+自动轮播</text>
+          </g>
+
+          <!-- ===== Bottom: Data flow summary ===== -->
+          <g>
+            <rect x="30" y="548" width="1040" height="24" rx="6" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1" />
+            <text x="550" y="564" text-anchor="middle" fill="#64748B" font-size="11">
+              &#128640; 数据流向：星空业务单据 → API/中间表归集 → 苍穹加工计算+规则预警 → PC看板 / 移动端 / 大屏三端展示
+            </text>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Architecture Key Points -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
+        <div class="card" style="border-left:4px solid var(--primary);">
+          <div class="card-body">
+            <h4 style="font-size:14px;font-weight:700;margin-bottom:8px;color:var(--primary);">&#128230; 数据归集层</h4>
+            <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+              星空系统作为数据源头，通过<strong>定时抽取+手动触发</strong>双模式归集6大业务模块数据，经API/中间表同步至苍穹平台，确保数据完整性与一致性。</p>
+          </div>
+        </div>
+        <div class="card" style="border-left:4px solid #7C3AED;">
+          <div class="card-body">
+            <h4 style="font-size:14px;font-weight:700;margin-bottom:8px;color:#7C3AED;">&#9729; 苍穹处理层</h4>
+            <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+              苍穹平台作为统一开发基座，承担<strong>数据加工、预警规则、聚合分析、权限管控</strong>四大核心能力，利用低代码框架实现灵活扩展与快速迭代。</p>
+          </div>
+        </div>
+        <div class="card" style="border-left:4px solid var(--success);">
+          <div class="card-body">
+            <h4 style="font-size:14px;font-weight:700;margin-bottom:8px;color:var(--success);">&#127760; 多端展示层</h4>
+            <p style="font-size:13px;color:var(--text-secondary);line-height:1.7;">
+              基于苍穹渲染引擎，一次开发<strong>三端适配</strong>：PC看板深度分析、移动端轻量审批、大屏全局指挥，满足不同角色的使用场景。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 1: Display Optimization -->
+  <section class="section fade-in" id="display">
+    <div class="section-header">
+      <div class="section-tag tag-blue">&#9670; 模块一</div>
+      <h2>PC端展示层全面优化</h2>
+      <p>从传统表单升级为可视化看板，融入时间维度、金额维度与供应商维度，让项目进度一目了然</p>
+    </div>
+
+    <!-- Core Features -->
+    <div class="feature-grid" style="margin-bottom: 2rem;">
+      <div class="card feature-card">
+        <div class="feature-icon fi-blue">&#128202;</div>
+        <h4>进度图 + 列表双视图</h4>
+        <p>直观的进度图和列表视图优势。项目经理可根据场景自由选择。</p>
+      </div>
+      <div class="card feature-card">
+        <div class="feature-icon fi-green">&#128197;</div>
+        <h4>时间维度进度追踪</h4>
+        <p>新增"计划完成日期"和"延期天数"字段，自动计算滞留时长。进度滞后超过10%自动标红告警，让项目经理不再错过任何卡点。</p>
+      </div>
+      <div class="card feature-card">
+        <div class="feature-icon fi-amber">&#128176;</div>
+        <h4>金额口径进度</h4>
+        <p>除了数量维度外，同步展示金额完成比例。采购金额/应付金额/实付金额的对比，让财务监控更加精准。</p>
+      </div>
+      <div class="card feature-card">
+        <div class="feature-icon fi-red">&#128101;</div>
+        <h4>供应商视角看板</h4>
+        <p>实现供应商维度穿透。点击供应商即可查看全部PO明细、条目执行进度。</p>
+      </div>
+    </div>
+
+    <!-- Dashboard Mockup -->
+    <div class="mockup-frame">
+      <div class="mockup-bar">
+        <span class="mockup-dot dot-r"></span>
+        <span class="mockup-dot dot-y"></span>
+        <span class="mockup-dot dot-g"></span>
+        <span>项目进度看板 - PC端</span>
+      </div>
+      <div class="mockup-content" style="display: flex; height: 700px;">
+        <!-- Sidebar -->
+        <div class="dash-sidebar">
+          <div class="dash-sidebar-logo">
+            <h4>&#9733; 项目看板</h4>
+            <p>HMN IT平台</p>
+          </div>
+          <div class="dash-nav-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+              <rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+            项目总览
+          </div>
+          <div style="flex:1"></div>
+          <div class="dash-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+            </svg>
+            系统设置
+          </div>
+        </div>
+        <!-- Main Content -->
+        <div class="dash-main">
+          <div class="dash-topbar">
+            <div>
+              <h3>项目总览</h3>
+              <p style="font-size:12px;color:var(--text-secondary);margin-top:2px;">数据更新时间：2025-04-18 14:30</p>
+            </div>
+            <div class="dash-topbar-actions">
+              <button class="dash-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                </svg>
+                筛选
+              </button>
+              <button class="dash-btn dash-btn-primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M23 4v6h-6" />
+                  <path d="M1 20v-6h6" />
+                  <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+                </svg>
+                更新最新情况
+              </button>
+            </div>
+          </div>
+
+          <!-- Stats Cards -->
+          <div class="dash-stats">
+            <div class="dash-stat-card">
+              <div class="dash-stat-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+                  <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" />
+                </svg>
+                在执行项目
+              </div>
+              <div class="dash-stat-num" style="color:var(--primary);">8</div>
+              <div class="dash-stat-change change-up">&#9650; 较上月 +2</div>
+            </div>
+            <div class="dash-stat-card">
+              <div class="dash-stat-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2">
+                  <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
+                已完成项目
+              </div>
+              <div class="dash-stat-num" style="color:var(--success);">3</div>
+              <div class="dash-stat-change change-up">&#9650; 本月完成 1</div>
+            </div>
+            <div class="dash-stat-card">
+              <div class="dash-stat-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+                  <line x1="12" y1="9" x2="12" y2="13" />
+                  <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+                预警项目
+              </div>
+              <div class="dash-stat-num" style="color:var(--warning);">2</div>
+              <div class="dash-stat-change change-down">&#9660; 需要关注</div>
+            </div>
+            <div class="dash-stat-card">
+              <div class="dash-stat-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="15" y1="9" x2="9" y2="15" />
+                  <line x1="9" y1="9" x2="15" y2="15" />
+                </svg>
+                超期任务
+              </div>
+              <div class="dash-stat-num" style="color:var(--danger);">2</div>
+              <div class="dash-stat-change change-down">&#9660; 需立即处理</div>
+            </div>
+          </div>
+
+          <!-- Tabs -->
+          <div class="tab-bar">
+            <button class="tab-item active" onclick="switchTab(event,'tab-track')">进度视图</button>
+            <button class="tab-item" onclick="switchTab(event,'tab-list')">列表视图</button>
+            <button class="tab-item" onclick="switchTab(event,'tab-supplier')">供应商视图</button>
+          </div>
+
+          <!-- Track View -->
+          <div class="tab-panel active" id="tab-track">
+            <div class="card">
+              <div class="card-header">
+                <h3>&#128736; 10008001A | SS06-传输测量链路设备租赁</h3>
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <span class="status-badge sb-progress">进行中</span>
+                  <span style="font-size:12px;color:var(--text-secondary);">整体进度 65%</span>
+                </div>
+              </div>
+              <div class="card-body">
+                <p style="font-size:12px;color:var(--text-secondary);margin-bottom:16px;">设备采购流程进度 &mdash;
+                  最后更新：2025-04-18 14:30</p>
+                <div class="track">
+                  <div class="track-node">
+                    <div class="track-line done"></div>
+                    <div class="track-circle tc-done">&#10003;</div>
+                    <div class="track-label">采购申请</div>
+                    <div class="track-info">4/4 完成</div>
+                  </div>
+                  <div class="track-node">
+                    <div class="track-line done"></div>
+                    <div class="track-circle tc-done">&#10003;</div>
+                    <div class="track-label">采购订单</div>
+                    <div class="track-info">3/4 完成</div>
+                  </div>
+                  <div class="track-node">
+                    <div class="track-line progress"></div>
+                    <div class="track-circle tc-progress">2</div>
+                    <div class="track-label">采购入库</div>
+                    <div class="track-info">2/4 进行中</div>
+                  </div>
+                  <div class="track-node">
+                    <div class="track-line"></div>
+                    <div class="track-circle tc-pending">3</div>
+                    <div class="track-label">财务应付</div>
+                    <div class="track-info">0/4 未开始</div>
+                  </div>
+                  <div class="track-node">
+                    <div class="track-circle tc-pending">4</div>
+                    <div class="track-label">付款</div>
+                    <div class="track-info">0/4 未开始</div>
+                  </div>
+                </div>
+                <div
+                  style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border-light);">
+                  <div>
+                    <p style="font-size:12px;font-weight:600;margin-bottom:8px;">数量进度</p>
+                    <div class="progress-bar">
+                      <div class="progress-fill pf-blue" style="width:50%"></div>
+                    </div>
+                    <p style="font-size:11px;color:var(--text-secondary);margin-top:4px;">已入库 12 / 总计 24 台</p>
+                  </div>
+                  <div>
+                    <p style="font-size:12px;font-weight:600;margin-bottom:8px;">金额进度</p>
+                    <div class="progress-bar">
+                      <div class="progress-fill pf-green" style="width:65%"></div>
+                    </div>
+                    <p style="font-size:11px;color:var(--text-secondary);margin-top:4px;">已付 &#165;650万 / &#165;1,000万
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- List View -->
+          <div class="tab-panel" id="tab-list">
+            <div class="card">
+              <div class="card-body" style="padding:0;">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>项目编号</th>
+                      <th>项目名称</th>
+                      <th>当前阶段</th>
+                      <th>进度</th>
+                      <th>计划完成</th>
+                      <th>状态</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="font-weight:600;">10008001A</td>
+                      <td>SS06-传输测量链路设备租赁</td>
+                      <td>采购入库</td>
+                      <td>
+                        <div class="progress-bar" style="width:100px;display:inline-block;vertical-align:middle;">
+                          <div class="progress-fill pf-amber" style="width:65%"></div>
+                        </div> <span style="font-size:11px;">65%</span>
+                      </td>
+                      <td>2025-05-30</td>
+                      <td><span class="status-badge sb-progress">进行中</span></td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">10009001B</td>
+                      <td>PEACE Somaliland Berbera Branch</td>
+                      <td>财务应付</td>
+                      <td>
+                        <div class="progress-bar" style="width:100px;display:inline-block;vertical-align:middle;">
+                          <div class="progress-fill pf-green" style="width:80%"></div>
+                        </div> <span style="font-size:11px;">80%</span>
+                      </td>
+                      <td>2025-05-15</td>
+                      <td><span class="status-badge sb-progress">进行中</span></td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">10011001B</td>
+                      <td>中柬项目</td>
+                      <td>采购订单</td>
+                      <td>
+                        <div class="progress-bar" style="width:100px;display:inline-block;vertical-align:middle;">
+                          <div class="progress-fill pf-red" style="width:30%"></div>
+                        </div> <span style="font-size:11px;">30%</span>
+                      </td>
+                      <td style="color:var(--danger);font-weight:600;">2025-04-10</td>
+                      <td><span class="status-badge sb-danger">已超期</span></td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">10011003B</td>
+                      <td>Sihanoukville-Hong Kong Submarine Cable-华为云</td>
+                      <td>项目立项</td>
+                      <td>
+                        <div class="progress-bar" style="width:100px;display:inline-block;vertical-align:middle;">
+                          <div class="progress-fill pf-blue" style="width:15%"></div>
+                        </div> <span style="font-size:11px;">15%</span>
+                      </td>
+                      <td>2025-08-30</td>
+                      <td><span class="status-badge sb-pending">刚启动</span></td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">10011005A</td>
+                      <td>中柬项目-关联交易-大陆侧许可</td>
+                      <td>采购申请</td>
+                      <td>
+                        <div class="progress-bar" style="width:100px;display:inline-block;vertical-align:middle;">
+                          <div class="progress-fill pf-amber" style="width:45%"></div>
+                        </div> <span style="font-size:11px;">45%</span>
+                      </td>
+                      <td>2025-07-15</td>
+                      <td><span class="status-badge sb-progress">进行中</span></td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">10011006A</td>
+                      <td>中柬项目-关联交易-国际侧DTS</td>
+                      <td>采购订单</td>
+                      <td>
+                        <div class="progress-bar" style="width:100px;display:inline-block;vertical-align:middle;">
+                          <div class="progress-fill pf-green" style="width:70%"></div>
+                        </div> <span style="font-size:11px;">70%</span>
+                      </td>
+                      <td>2025-06-20</td>
+                      <td><span class="status-badge sb-progress">进行中</span></td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">10011007A</td>
+                      <td>中柬项目-关联交易-国内DTS</td>
+                      <td>采购入库</td>
+                      <td>
+                        <div class="progress-bar" style="width:100px;display:inline-block;vertical-align:middle;">
+                          <div class="progress-fill pf-green" style="width:55%"></div>
+                        </div> <span style="font-size:11px;">55%</span>
+                      </td>
+                      <td>2025-06-30</td>
+                      <td><span class="status-badge sb-progress">进行中</span></td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">10011009A</td>
+                      <td>Sihanoukville-HK Cable-Equipment</td>
+                      <td>项目立项</td>
+                      <td>
+                        <div class="progress-bar" style="width:100px;display:inline-block;vertical-align:middle;">
+                          <div class="progress-fill pf-blue" style="width:10%"></div>
+                        </div> <span style="font-size:11px;">10%</span>
+                      </td>
+                      <td>2025-09-30</td>
+                      <td><span class="status-badge sb-pending">刚启动</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Supplier View -->
+          <div class="tab-panel" id="tab-supplier">
+            <div class="card">
+              <div class="card-header">
+                <h3>&#128101; 供应商维度概览</h3>
+                <span style="font-size:12px;color:var(--text-secondary);">按供应商汇总采购执行进度</span>
+              </div>
+              <div class="card-body" style="padding:0;">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>供应商</th>
+                      <th>采购总额</th>
+                      <th>已完成</th>
+                      <th>在途</th>
+                      <th>未开始</th>
+                      <th>进度</th>
+                      <th>操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="font-weight:600;">华为云</td>
+                      <td>&#165;580万</td>
+                      <td style="color:var(--success);">&#165;350万</td>
+                      <td style="color:var(--warning);">&#165;180万</td>
+                      <td style="color:var(--text-light);">&#165;50万</td>
+                      <td>
+                        <div class="progress-bar" style="width:80px;display:inline-block;vertical-align:middle;">
+                          <div class="progress-fill pf-green" style="width:60%"></div>
+                        </div> 60%
+                      </td>
+                      <td><button class="dash-btn" style="font-size:11px;padding:4px 10px;">查看明细</button></td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">华为海洋网络</td>
+                      <td>&#165;420万</td>
+                      <td style="color:var(--success);">&#165;420万</td>
+                      <td>-</td>
+                      <td>-</td>
+                      <td>
+                        <div class="progress-bar" style="width:80px;display:inline-block;vertical-align:middle;">
+                          <div class="progress-fill pf-green" style="width:100%"></div>
+                        </div> 100%
+                      </td>
+                      <td><button class="dash-btn" style="font-size:11px;padding:4px 10px;">查看明细</button></td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">中通建设集团</td>
+                      <td>&#165;310万</td>
+                      <td style="color:var(--success);">&#165;120万</td>
+                      <td style="color:var(--warning);">&#165;90万</td>
+                      <td style="color:var(--text-light);">&#165;100万</td>
+                      <td>
+                        <div class="progress-bar" style="width:80px;display:inline-block;vertical-align:middle;">
+                          <div class="progress-fill pf-amber" style="width:39%"></div>
+                        </div> 39%
+                      </td>
+                      <td><button class="dash-btn" style="font-size:11px;padding:4px 10px;">查看明细</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Mobile -->
+  <section class="section fade-in" id="mobile" style="background:#fff;padding:4rem 2rem;">
+    <div style="max-width:1280px;margin:0 auto;">
+      <div class="section-header">
+        <div class="section-tag tag-green">&#9743; 模块二</div>
+        <h2>移动端轻量应用</h2>
+        <p>项目经理无需打开电脑，手机即可掌握项目动态、处理审批、接收预警，随时随地掌控全局</p>
+      </div>
+
+      <div class="feature-grid" style="margin-bottom:2.5rem;">
+        <div class="card feature-card">
+          <div class="feature-icon fi-green">&#128241;</div>
+          <h4>轻量化催办处理</h4>
+          <p>在移动端支持查看单据核心内容详情，针对延期超期未处理流程单据一健催办，给相关单据流程当前审批人发送催办系统消息和邮件，减少审批流转时间50%以上。</p>
+        </div>
+        <div class="card feature-card">
+          <div class="feature-icon fi-blue">&#128276;</div>
+          <h4>实时消息推送</h4>
+          <p>项目进度变更、预警通知通过系统消息/邮件即时推送，重要消息不错过。</p>
+        </div>
+        <div class="card feature-card">
+          <div class="feature-icon fi-amber">&#128200;</div>
+          <h4>一页式进度速览</h4>
+          <p>精简卡片式布局，一张图展示项目整体健康度、各环节进度、关键指标，5秒掌握全局。</p>
+        </div>
+      </div>
+
+      <!-- Phone Mockups -->
+      <div class="mobile-wrapper">
+        <!-- Phone 1: Dashboard -->
+        <div>
+          <p style="text-align:center;font-size:13px;font-weight:600;margin-bottom:12px;color:var(--text-secondary);">首页
+            - 项目速览</p>
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <div class="phone-notch"></div>
+              <div class="phone-content">
+                <div class="phone-header">
+                  <h4>&#9733; 项目进度看板</h4>
+                  <p>2025-04-18 周五</p>
+                </div>
+
+                <!-- Project Health -->
+                <div class="phone-card" style="background:linear-gradient(135deg, #2563EB, #7C3AED);border:none;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                      <p style="font-size:11px;color:rgba(255,255,255,0.7);">我的项目</p>
+                      <p style="font-size:24px;font-weight:800;color:#fff;">8</p>
+                    </div>
+                    <div style="display:flex;gap:12px;">
+                      <div style="text-align:center;">
+                        <p style="font-size:16px;font-weight:700;color:#34D399;">4</p>
+                        <p style="font-size:10px;color:rgba(255,255,255,0.6);">正常</p>
+                      </div>
+                      <div style="text-align:center;">
+                        <p style="font-size:16px;font-weight:700;color:#FBBF24;">2</p>
+                        <p style="font-size:10px;color:rgba(255,255,255,0.6);">预警</p>
+                      </div>
+                      <div style="text-align:center;">
+                        <p style="font-size:16px;font-weight:700;color:#F87171;">2</p>
+                        <p style="font-size:10px;color:rgba(255,255,255,0.6);">异常</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Project Card -->
+                <div class="phone-card">
+                  <div class="phone-card-title">
+                    <span>10008001A SS06-传输测量链路设备租赁</span>
+                    <span class="status-badge sb-progress" style="font-size:10px;">65%</span>
+                  </div>
+                  <div class="phone-mini-track">
+                    <div class="phone-mini-node" style="background:var(--success);flex:1.5;"></div>
+                    <div class="phone-mini-node" style="background:var(--warning);flex:1;"></div>
+                    <div class="phone-mini-node" style="background:var(--border);flex:1.5;"></div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-light);">
+                    <!--<span>申请&#10003;</span><span>订单&#10003;</span><span>入库</span><span>应付</span><span>付款</span>-->
+                  </div>
+                </div>
+
+                <div class="phone-card">
+                  <div class="phone-card-title">
+                    <span>10011001B 中柬项目</span>
+                    <span class="status-badge sb-danger" style="font-size:10px;">超期</span>
+                  </div>
+                  <div class="phone-mini-track">
+                    <!--<div class="phone-mini-node" style="background:var(--success);flex:0.8;"></div>-->
+                    <div class="phone-mini-node" style="background:var(--danger);flex:2.2;"></div>
+                  </div>
+                  <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-light);">
+                    <!-- <span>申请&#10003;</span><span>订单</span><span>入库</span><span>应付</span><span>付款</span>-->
+                  </div>
+                </div>
+
+                <!-- Alerts -->
+                <div style="margin-top:8px;">
+                  <p style="font-size:12px;font-weight:600;margin-bottom:8px;">&#128276; 待处理提醒</p>
+                  <div class="phone-card" style="border-left:3px solid var(--danger);">
+                    <p style="font-size:12px;font-weight:600;color:var(--danger);">采购订单超期</p>
+                    <p style="font-size:11px;color:var(--text-secondary);">10011001B 中柬项目 PO-20250415 待审批</p>
+                    <p style="font-size:10px;color:var(--text-light);margin-top:4px;">10分钟前</p>
+                  </div>
+                  <div class="phone-card" style="border-left:3px solid var(--warning);">
+                    <p style="font-size:12px;font-weight:600;color:var(--warning);">付款超期提醒</p>
+                    <p style="font-size:11px;color:var(--text-secondary);">10009001B PEACE Somaliland 付款已超期3天</p>
+                    <p style="font-size:10px;color:var(--text-light);margin-top:4px;">1小时前</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone 2: Detail -->
+        <div>
+          <p style="text-align:center;font-size:13px;font-weight:600;margin-bottom:12px;color:var(--text-secondary);">
+            项目详情 - 进度穿透</p>
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <div class="phone-notch"></div>
+              <div class="phone-content">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+                  <span style="font-size:16px;">&#8592;</span>
+                  <h4 style="font-size:14px;font-weight:700;">SS06-传输测量链路设备租赁</h4>
+                </div>
+
+                <!-- Progress Ring (SVG) -->
+                <div style="text-align:center;margin-bottom:16px;">
+                  <svg width="100" height="100" viewBox="0 0 100 100" style="transform:rotate(-90deg);">
+                    <circle cx="50" cy="50" r="42" fill="none" stroke="#E2E8F0" stroke-width="6" />
+                    <circle cx="50" cy="50" r="42" fill="none" stroke="#2563EB" stroke-width="6"
+                      stroke-dasharray="263.9" stroke-dashoffset="92.4" stroke-linecap="round" />
+                  </svg>
+                  <div style="margin-top:-62px;position:relative;">
+                    <span style="font-size:22px;font-weight:800;">65%</span>
+                  </div>
+                  <p style="font-size:11px;color:var(--text-secondary);margin-top:28px;">整体完成进度</p>
+                </div>
+
+                <!-- Detail Track -->
+                <div class="phone-card">
+                  <p style="font-size:12px;font-weight:600;margin-bottom:10px;">设备采购流程</p>
+                  <div style="display:flex;flex-direction:column;gap:12px;">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div
+                        style="width:24px;height:24px;border-radius:50%;background:var(--success);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;">
+                        &#10003;</div>
+                      <div style="flex:1;">
+                        <p style="font-size:12px;font-weight:500;">采购申请</p>
+                        <p style="font-size:10px;color:var(--success);">4/4 已完成</p>
+                      </div>
+                      <span style="font-size:11px;color:var(--text-light);">03-20</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div
+                        style="width:24px;height:24px;border-radius:50%;background:var(--success);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;">
+                        &#10003;</div>
+                      <div style="flex:1;">
+                        <p style="font-size:12px;font-weight:500;">采购订单</p>
+                        <p style="font-size:10px;color:var(--success);">3/4 已完成</p>
+                      </div>
+                      <span style="font-size:11px;color:var(--text-light);">04-05</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div
+                        style="width:24px;height:24px;border-radius:50%;background:var(--warning);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;">
+                        2</div>
+                      <div style="flex:1;">
+                        <p style="font-size:12px;font-weight:500;">采购入库</p>
+                        <p style="font-size:10px;color:var(--warning);">2/4 进行中</p>
+                      </div>
+                      <span style="font-size:11px;color:var(--danger);font-weight:600;">延期2天</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div
+                        style="width:24px;height:24px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-light);font-size:11px;">
+                        3</div>
+                      <div style="flex:1;">
+                        <p style="font-size:12px;font-weight:500;">财务应付</p>
+                        <p style="font-size:10px;color:var(--text-light);">0/4 未开始</p>
+                      </div>
+                      <span style="font-size:11px;color:var(--text-light);">05-20</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div
+                        style="width:24px;height:24px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-light);font-size:11px;">
+                        4</div>
+                      <div style="flex:1;">
+                        <p style="font-size:12px;font-weight:500;">付款</p>
+                        <p style="font-size:10px;color:var(--text-light);">0/4 未开始</p>
+                      </div>
+                      <span style="font-size:11px;color:var(--text-light);">06-15</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">
+                  <button
+                    style="padding:10px;border-radius:10px;background:var(--primary);color:#fff;font-size:12px;font-weight:600;border:none;cursor:pointer;">催办
+                    (2)</button>
+                  <button
+                    style="padding:10px;border-radius:10px;background:var(--bg);color:var(--text);font-size:12px;font-weight:600;border:1px solid var(--border);cursor:pointer;">查看明细</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Alert System -->
+  <section class="section fade-in" id="alert">
+    <div class="section-header">
+      <div class="section-tag tag-amber">&#9888; 模块三</div>
+      <h2>智能预警与主动监控</h2>
+      <p>从"被动查看"升级为"主动预警"，让项目经理从"每天手动看板"变成"有问题才介入"</p>
+    </div>
+
+    <div class="feature-grid" style="margin-bottom:2rem;">
+      <div class="card feature-card">
+        <div class="feature-icon fi-red">&#128680;</div>
+        <h4>多级预警规则引擎</h4>
+        <p>支持自定义预警阈值和触发条件：进度滞后、超期未提交、付款滞留等，分级推送（紧急/重要/一般）。</p>
+      </div>
+      <div class="card feature-card">
+        <div class="feature-icon fi-blue">&#128172;</div>
+        <h4>多渠道消息推送</h4>
+        <p>一期：系统内消息 + 邮件；二期：通过Welink项目群组机器人方式，定期推送项目预警和通知消息到群组@指定人员。确保关键告警不被遗漏，智能自动化驱动流程任务。</p>
+      </div>
+      <div class="card feature-card">
+        <div class="feature-icon fi-green">&#128200;</div>
+        <h4>趋势分析与预测</h4>
+        <p>未来：基于历史数据和平台AI功能，置入识别规则，训练项目进度监控模型，自动识别延期风险，提前预警"可能超期"项目，而非等到真正超期才告警。</p>
+      </div>
+      <div class="card feature-card">
+        <div class="feature-icon fi-amber">&#128101;</div>
+        <h4>智能升级机制</h4>
+        <p>预警未处理自动升级：12小时未处理通知直属上级，24小时未处理通知部门负责人，确保无遗漏。</p>
+      </div>
+    </div>
+
+    <!-- Alert Rules Table -->
+    <div class="card" style="margin-bottom:2rem;">
+      <div class="card-header">
+        <h3>&#128203; 预警规则配置</h3>
+        <button class="dash-btn" style="font-size:12px;">+ 新增规则</button>
+      </div>
+      <div class="card-body" style="padding:0;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>触发条件</th>
+              <th>级别</th>
+              <th>推送对象</th>
+              <th>推送渠道</th>
+              <th>升级规则</th>
+              <th>状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>采购订单超期 &gt; 3天未提交</td>
+              <td><span class="status-badge sb-danger">紧急</span></td>
+              <td>项目经理 + 采购负责人</td>
+              <td>系统消息 + 邮件</td>
+              <td>12h升级至部门领导</td>
+              <td><span class="status-badge sb-done">已启用</span></td>
+            </tr>
+            <tr>
+              <td>付款单滞留 &gt; 5天</td>
+              <td><span class="status-badge sb-progress">重要</span></td>
+              <td>财务负责人</td>
+              <td>系统消息 + 邮件</td>
+              <td>24h升级至财务负责人</td>
+              <td><span class="status-badge sb-done">已启用</span></td>
+            </tr>
+            <tr>
+              <td>CV变更金额 &gt; 5%</td>
+              <td><span class="status-badge sb-progress">重要</span></td>
+              <td>项目经理 + 项目总监+财务负责人+高层直管领导</td>
+              <td>系统消息 + 邮件</td>
+              <td>无</td>
+              <td><span class="status-badge sb-done">已启用</span></td>
+            </tr>
+            <tr>
+              <td>进度滞后 &gt; 20%</td>
+              <td><span class="status-badge sb-danger">紧急</span></td>
+              <td>项目经理</td>
+              <td>系统消息</td>
+              <td>每日推送</td>
+              <td><span class="status-badge sb-done">已启用</span></td>
+            </tr>
+            <tr>
+              <td>入库数量 &lt; 订单数量且超期</td>
+              <td><span class="status-badge sb-pending">一般</span></td>
+              <td>采购负责人</td>
+              <td>系统消息</td>
+              <td>无</td>
+              <td><span class="status-badge sb-done">已启用</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Alert Center Mockup -->
+    <div class="mockup-frame">
+      <div class="mockup-bar">
+        <span class="mockup-dot dot-r"></span>
+        <span class="mockup-dot dot-y"></span>
+        <span class="mockup-dot dot-g"></span>
+        <span>预警消息中心</span>
+      </div>
+      <div class="mockup-content" style="padding:2rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+          <div>
+            <h3 style="font-size:18px;font-weight:700;">预警中心</h3>
+            <p style="font-size:13px;color:var(--text-secondary);margin-top:4px;">实时监控项目执行风险，主动发现并推送异常</p>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="dash-btn" style="font-size:12px;">全部已读</button>
+          </div>
+        </div>
+
+        <div class="alert-list">
+          <div class="alert-item alert-critical">
+            <div class="alert-icon">&#128680;</div>
+            <div class="alert-body">
+              <div class="alert-title">10011001B 中柬项目 - 采购订单超期</div>
+              <div class="alert-desc">PO-20250415 已超期 8 天未提交，涉及金额 &#165;156万，供应商：中通建设集团</div>
+              <!-- <div class="alert-time">&#128337; 10分钟前触发 | 升级倒计时：11h50m</div>-->
+            </div>
+
+          </div>
+          <div class="alert-item alert-critical">
+            <div class="alert-icon">&#9888;</div>
+            <div class="alert-body">
+              <div class="alert-title">10011001B 中柬项目 - 进度严重滞后</div>
+              <div class="alert-desc">当前进度30%，计划进度应为55%，滞后25%，预计延期约20天</div>
+              <!-- <div class="alert-time">&#128337; 1小时前触发 | 已通知项目总监</div>-->
+            </div>
+
+          </div>
+          <div class="alert-item alert-warning">
+            <div class="alert-icon">&#128176;</div>
+            <div class="alert-body">
+              <div class="alert-title">10009001B PEACE Somaliland - 付款滞留提醒</div>
+              <div class="alert-desc">Somaliland Branch PO-20250320 付款单已滞留 5 天，应付金额 &#165;86万</div>
+              <!-- <div class="alert-time">&#128337; 3小时前触发 | 下次升级：19h后</div>-->
+            </div>
+
+          </div>
+          <div class="alert-item alert-warning">
+            <div class="alert-icon">&#128202;</div>
+            <div class="alert-body">
+              <div class="alert-title">10008001A SS06-传输测量链路 - CV变更告警</div>
+              <div class="alert-desc">华为海洋网络采购合同发生金额变更，原 &#165;310万 &#8594; 现 &#165;358万，变更幅度 15.5%</div>
+              <!-- <div class="alert-time">&#128337; 昨天 16:45</div>-->
+            </div>
+
+          </div>
+          <div class="alert-item alert-info">
+            <div class="alert-icon">&#128203;</div>
+            <div class="alert-body">
+              <div class="alert-title">10011003B Sihanoukville-Hong Kong Cable - 采购申请即将到期</div>
+              <div class="alert-desc">PR-20250420 计划完成日期 2025-04-22，剩余 4 天</div>
+              <!-- <div class="alert-time">&#128337; 今天 09:00</div> -->
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Big Screen Dashboard -->
+  <section class="section fade-in" id="bigscreen" style="background:#020617;padding:4rem 2rem;">
+    <div style="max-width:1280px;margin:0 auto;">
+      <div class="section-header">
+        <div class="section-tag" style="background:rgba(96,165,250,0.15);color:#60A5FA;">&#127916; 模块四</div>
+        <h2 style="color:#fff;">项目监管看板大屏</h2>
+        <p style="color:rgba(255,255,255,0.5);">投放于公司会议室/指挥中心的大尺寸显示屏，实时呈现全局项目态势，支撑管理决策</p>
+      </div>
+
+      <div class="feature-grid" style="margin-bottom:2rem;">
+        <div class="card" style="background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.08);">
+          <div class="card-body">
+            <h4 style="color:#fff;font-size:14px;margin-bottom:8px;">&#128202; 全局态势一屏掌握</h4>
+            <p style="color:rgba(255,255,255,0.5);font-size:12px;">所有在执行项目的核心指标集中展示，无需逐个打开，1屏纵览全局</p>
+          </div>
+        </div>
+        <div class="card" style="background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.08);">
+          <div class="card-body">
+            <h4 style="color:#fff;font-size:14px;margin-bottom:8px;">&#9889; 风险项目自动置顶</h4>
+            <p style="color:rgba(255,255,255,0.5);font-size:12px;">异常和预警项目自动排序到最显眼位置，问题项目一目了然</p>
+          </div>
+        </div>
+        <div class="card" style="background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.08);">
+          <div class="card-body">
+            <h4 style="color:#fff;font-size:14px;margin-bottom:8px;">&#128260; 自动轮播模式</h4>
+            <p style="color:rgba(255,255,255,0.5);font-size:12px;">无人操作时自动轮播各项目详情，适合会议室展示和汇报场景</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Big Screen Mockup -->
+      <div class="screen-bg">
+        <div class="screen-header">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div
+              style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#2563EB,#7C3AED);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:12px;">
+              K</div>
+            <div>
+              <h3 style="font-size:16px;font-weight:700;">HMN IT平台 &mdash; 项目指挥中心</h3>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:16px;">
+            <span style="color:rgba(255,255,255,0.4);font-size:12px;">&#128274; 数据安全等级: 内部</span>
+            <span class="time" id="screenTime">2025-04-18 14:30:00</span>
+          </div>
+        </div>
+
+        <div style="padding:1rem 1.5rem;">
+          <!-- Top Stats -->
+          <div class="screen-grid" style="margin-bottom:0.75rem;">
+            <div class="screen-card">
+              <h4>在执行项目</h4>
+              <div class="screen-num blue">8</div>
+              <div class="screen-sub">较上月 +2 | 总金额 &#165;3,860万</div>
+            </div>
+            <div class="screen-card">
+              <h4>项目健康度</h4>
+              <div class="screen-num green">75<span style="font-size:18px;">%</span></div>
+              <div class="screen-sub">4 正常 / 2 预警 / 2 异常</div>
+            </div>
+            <div class="screen-card">
+              <h4>本月待处理预警</h4>
+              <div class="screen-num red">12</div>
+              <div class="screen-sub">紧急 4 | 重要 5 | 一般 3</div>
+            </div>
+          </div>
+
+          <!-- Project Cards -->
+          <div class="screen-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="screen-card" style="border-left:3px solid #34D399;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div>
+                  <h4 style="margin-bottom:4px;">10008001A</h4>
+                  <p style="color:#fff;font-size:13px;font-weight:600;">SS06-传输测量链路设备租赁</p>
+                </div>
+                <span
+                  style="background:rgba(52,211,153,0.15);color:#34D399;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:600;">正常</span>
+              </div>
+              <div style="margin-top:12px;">
+                <div style="height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;">
+                  <div style="height:100%;width:65%;background:#34D399;border-radius:2px;"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-top:6px;">
+                  <span style="font-size:10px;color:rgba(255,255,255,0.4);">进度 65%</span>
+                  <span style="font-size:10px;color:rgba(255,255,255,0.4);">&#165;1,000万</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:3px;margin-top:8px;">
+                <div style="flex:1;height:3px;border-radius:2px;background:#34D399;"></div>
+                <div style="flex:1;height:3px;border-radius:2px;background:#34D399;"></div>
+                <div style="flex:1;height:3px;border-radius:2px;background:#FBBF24;"></div>
+                <div style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,0.1);"></div>
+                <div style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,0.1);"></div>
+              </div>
+            </div>
+
+            <div class="screen-card" style="border-left:3px solid #34D399;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div>
+                  <h4 style="margin-bottom:4px;">10009001B</h4>
+                  <p style="color:#fff;font-size:13px;font-weight:600;">PEACE Somaliland Berbera Branch</p>
+                </div>
+                <span
+                  style="background:rgba(52,211,153,0.15);color:#34D399;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:600;">正常</span>
+              </div>
+              <div style="margin-top:12px;">
+                <div style="height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;">
+                  <div style="height:100%;width:80%;background:#34D399;border-radius:2px;"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-top:6px;">
+                  <span style="font-size:10px;color:rgba(255,255,255,0.4);">进度 80%</span>
+                  <span style="font-size:10px;color:rgba(255,255,255,0.4);">&#165;860万</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:3px;margin-top:8px;">
+                <div style="flex:1;height:3px;border-radius:2px;background:#34D399;"></div>
+                <div style="flex:1;height:3px;border-radius:2px;background:#34D399;"></div>
+                <div style="flex:1;height:3px;border-radius:2px;background:#34D399;"></div>
+                <div style="flex:1;height:3px;border-radius:2px;background:#FBBF24;"></div>
+                <div style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,0.1);"></div>
+              </div>
+            </div>
+
+            <div class="screen-card" style="border-left:3px solid #F87171;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div>
+                  <h4 style="margin-bottom:4px;">10011001B</h4>
+                  <p style="color:#fff;font-size:13px;font-weight:600;">中柬项目</p>
+                </div>
+                <span
+                  style="background:rgba(248,113,113,0.15);color:#F87171;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:600;">异常</span>
+              </div>
+              <div style="margin-top:12px;">
+                <div style="height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;">
+                  <div style="height:100%;width:30%;background:#F87171;border-radius:2px;"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-top:6px;">
+                  <span style="font-size:10px;color:#F87171;">进度 30% | 超期 8天</span>
+                  <span style="font-size:10px;color:rgba(255,255,255,0.4);">&#165;780万</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:3px;margin-top:8px;">
+                <div style="flex:1;height:3px;border-radius:2px;background:#34D399;"></div>
+                <div style="flex:1;height:3px;border-radius:2px;background:#F87171;"></div>
+                <div style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,0.1);"></div>
+                <div style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,0.1);"></div>
+                <div style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,0.1);"></div>
+              </div>
+            </div>
+
+            <div class="screen-card" style="border-left:3px solid #FBBF24;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div>
+                  <h4 style="margin-bottom:4px;">10011003B</h4>
+                  <p style="color:#fff;font-size:13px;font-weight:600;">Sihanoukville-HK Cable-华为云</p>
+                </div>
+                <span
+                  style="background:rgba(251,191,36,0.15);color:#FBBF24;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:600;">预警</span>
+              </div>
+              <div style="margin-top:12px;">
+                <div style="height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;">
+                  <div style="height:100%;width:15%;background:#FBBF24;border-radius:2px;"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;margin-top:6px;">
+                  <span style="font-size:10px;color:rgba(255,255,255,0.4);">进度 15%</span>
+                  <span style="font-size:10px;color:rgba(255,255,255,0.4);">&#165;420万</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:3px;margin-top:8px;">
+                <div style="flex:1;height:3px;border-radius:2px;background:#FBBF24;"></div>
+                <div style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,0.1);"></div>
+                <div style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,0.1);"></div>
+                <div style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,0.1);"></div>
+                <div style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,0.1);"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Section -->
+          <div class="screen-grid" style="margin-top:0.75rem;">
+            <!-- Alert Ticker -->
+            <div class="screen-card" style="grid-column:span 2;">
+              <h4 style="margin-bottom:12px;">&#9888; 实时预警动态</h4>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <div
+                  style="display:flex;align-items:center;gap:8px;padding:8px;background:rgba(248,113,113,0.1);border-radius:6px;border-left:3px solid #F87171;">
+                  <span style="color:#F87171;font-size:12px;font-weight:600;">紧急</span>
+                  <span style="color:rgba(255,255,255,0.8);font-size:12px;">10011001B 中柬项目 采购订单超期8天，已自动升级通知项目总监</span>
+                  <span style="color:rgba(255,255,255,0.3);font-size:10px;margin-left:auto;">10min</span>
+                </div>
+                <div
+                  style="display:flex;align-items:center;gap:8px;padding:8px;background:rgba(251,191,36,0.1);border-radius:6px;border-left:3px solid #FBBF24;">
+                  <span style="color:#FBBF24;font-size:12px;font-weight:600;">重要</span>
+                  <span style="color:rgba(255,255,255,0.8);font-size:12px;">10009001B PEACE Somaliland 付款滞留5天，金额
+                    &#165;86万</span>
+                  <span style="color:rgba(255,255,255,0.3);font-size:10px;margin-left:auto;">3h</span>
+                </div>
+                <div
+                  style="display:flex;align-items:center;gap:8px;padding:8px;background:rgba(251,191,36,0.1);border-radius:6px;border-left:3px solid #FBBF24;">
+                  <span style="color:#FBBF24;font-size:12px;font-weight:600;">重要</span>
+                  <span style="color:rgba(255,255,255,0.8);font-size:12px;">10008001A SS06-传输测量链路 CV变更 +15.5%，需审批</span>
+                  <span style="color:rgba(255,255,255,0.3);font-size:10px;margin-left:auto;">1d</span>
+                </div>
+              </div>
+            </div>
+            <!-- Supplier Summary -->
+            <div class="screen-card">
+              <h4 style="margin-bottom:12px;">&#128101; 核心供应商执行率</h4>
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                    <span style="color:rgba(255,255,255,0.7);font-size:11px;">华为云</span>
+                    <span style="color:#34D399;font-size:11px;font-weight:600;">60%</span>
+                  </div>
+                  <div style="height:4px;background:rgba(255,255,255,0.1);border-radius:2px;">
+                    <div style="height:100%;width:60%;background:#34D399;border-radius:2px;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                    <span style="color:rgba(255,255,255,0.7);font-size:11px;">华为海洋网络</span>
+                    <span style="color:#34D399;font-size:11px;font-weight:600;">100%</span>
+                  </div>
+                  <div style="height:4px;background:rgba(255,255,255,0.1);border-radius:2px;">
+                    <div style="height:100%;width:100%;background:#34D399;border-radius:2px;"></div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                    <span style="color:rgba(255,255,255,0.7);font-size:11px;">中通建设集团</span>
+                    <span style="color:#FBBF24;font-size:11px;font-weight:600;">39%</span>
+                  </div>
+                  <div style="height:4px;background:rgba(255,255,255,0.1);border-radius:2px;">
+                    <div style="height:100%;width:39%;background:#FBBF24;border-radius:2px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Implementation Plan -->
+  <section class="section fade-in" id="plan" style="background:#fff;">
+    <div style="max-width:1280px;margin:0 auto;">
+      <div class="section-header">
+        <div class="section-tag tag-blue">&#128203; 实施规划</div>
+        <h2>分阶段落地路径</h2>
+        <p>按优先级分三个阶段交付，确保核心功能先上线，增值功能分步迭代</p>
+      </div>
+
+      <!-- Phase Timeline -->
+      <div style="margin-bottom:3rem;">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot done"></div>
+            <div class="tl-label">阶段 1</div>
+            <div class="tl-desc">数据归集同步</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot current"></div>
+            <div class="tl-label">阶段 2</div>
+            <div class="tl-desc">展示层优化</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot future"></div>
+            <div class="tl-label">阶段 3</div>
+            <div class="tl-desc">预警+大屏+移动端</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase Details -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;">
+        <div class="card">
+          <div class="card-body">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+              <div
+                style="width:32px;height:32px;border-radius:8px;background:var(--success-bg);display:flex;align-items:center;justify-content:center;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+              <div>
+                <h4 style="font-size:14px;font-weight:700;">阶段 1 基础版</h4>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                <span style="color:var(--success);">&#10003;</span> 星空项目数据归集整理
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                <span style="color:var(--success);">&#10003;</span> 定时数据同步（半天一次）
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                <span style="color:var(--success);">&#10003;</span> 手动触发更新
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                <span style="color:var(--success);">&#10003;</span> 联查明细
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="border:2px solid var(--primary);">
+          <div class="card-body">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+              <div
+                style="width:32px;height:32px;border-radius:8px;background:var(--info-bg);display:flex;align-items:center;justify-content:center;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 8v4l3 3" />
+                </svg>
+              </div>
+              <div>
+                <h4 style="font-size:14px;font-weight:700;">阶段 2 展示优化</h4>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                <span style="color:var(--primary);">&#9733;</span> 进度图视图
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                <span style="color:var(--primary);">&#9733;</span> 时间维度（计划/延期）
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                <span style="color:var(--primary);">&#9733;</span> 金额维度进度
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                <span style="color:var(--primary);">&#9733;</span> 供应商视角看板
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                <span style="color:var(--primary);">&#9733;</span> CV变更追踪
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+              <div
+                style="width:32px;height:32px;border-radius:8px;background:var(--warning-bg);display:flex;align-items:center;justify-content:center;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <path d="M3 9h18M9 21V9" />
+                </svg>
+              </div>
+              <div>
+                <h4 style="font-size:14px;font-weight:700;">阶段 3 智能化</h4>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                <span style="color:var(--warning);">&#9733;</span> 多级预警规则引擎
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                <span style="color:var(--warning);">&#9733;</span> 智能升级推送机制
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                <span style="color:var(--warning);">&#9733;</span> 大屏指挥看板
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                <span style="color:var(--warning);">&#9733;</span> 移动端轻量应用
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+                <span style="color:var(--warning);">&#9733;</span> Welink集成
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary Comparison -->
+      <div class="card" style="margin-top:2.5rem;">
+        <div class="card-header">
+          <h3>&#128200; 方案优化前后对比</h3>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>对比维度</th>
+                <th>原星空方案</th>
+                <th>优化后方案</th>
+                <th>提升效果</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:600;">展示方式</td>
+                <td>表单列表，点击联查</td>
+                <td>进度图 + 列表 + 供应商三维切换</td>
+                <td class="compare-highlight" style="font-weight:600;color:var(--success);">直观度提升 3x</td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">进度维度</td>
+                <td>仅数量进度</td>
+                <td>数量 + 金额 + 时间三维度</td>
+                <td class="compare-highlight" style="font-weight:600;color:var(--success);">监控颗粒度 3x</td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">风险发现</td>
+                <td>被动查看，手动刷新</td>
+                <td>主动预警 + 智能升级推送</td>
+                <td class="compare-highlight" style="font-weight:600;color:var(--success);">响应速度 5x</td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">移动端</td>
+                <td>不支持</td>
+                <td>审批 + 推送 + 速览全支持</td>
+                <td class="compare-highlight" style="font-weight:600;color:var(--success);">从 0 到 1</td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">管理视角</td>
+                <td>单项目逐个查看</td>
+                <td>大屏全局指挥 + 供应商聚合</td>
+                <td class="compare-highlight" style="font-weight:600;color:var(--success);">管理半径 10x</td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">数据更新</td>
+                <td>半天定时 + 手动</td>
+                <td>2小时定时 + 手动 + 事件触发</td>
+                <td class="compare-highlight" style="font-weight:600;color:var(--success);">时效性 4x</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p style="margin-bottom:8px;">金蝶项目组 &middot; HMN IT平台建设项目 &middot; 智慧项目方案优化设计</p>
+    <p>文档版本 v2.0 刘亚聪 &middot; 2025年4月 &middot; 仅供华海内部评审使用</p>
+  </footer>
+
+  <script>
+    // Tab switching
+    function switchTab(e, tabId) {
+      document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      e.target.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    // Smooth scroll for nav
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+        document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Update screen time
+    function updateScreenTime() {
+      const now = new Date();
+      const str = now.getFullYear() + '-' +
+        String(now.getMonth() + 1).padStart(2, '0') + '-' +
+        String(now.getDate()).padStart(2, '0') + ' ' +
+        String(now.getHours()).padStart(2, '0') + ':' +
+        String(now.getMinutes()).padStart(2, '0') + ':' +
+        String(now.getSeconds()).padStart(2, '0');
+      const el = document.getElementById('screenTime');
+      if (el) el.textContent = str;
+    }
+    setInterval(updateScreenTime, 1000);
+    updateScreenTime();
+
+    // Active nav on scroll
+    window.addEventListener('scroll', () => {
+      const sections = ['architecture', 'display', 'mobile', 'alert', 'bigscreen', 'plan'];
+      let current = '';
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && window.scrollY >= el.offsetTop - 200) current = id;
+      });
+      document.querySelectorAll('.nav-links a').forEach(a => {
+        a.classList.remove('active');
+        if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+
+</html>
