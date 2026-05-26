@@ -79,4 +79,7 @@ https://yacongliu.github.io/Mind/客户情况/北京慧图科技企业洞察报�
 https://yacongliu.github.io/Mind/客户情况/中航直升机企业洞察报告.html
 
 ## 四、其他
+
+### 华海智慧项目可视化
 https://yacongliu.github.io/Mind/others/HMN_智慧项目看板方案优化设计_v2.html
+https://yacongliu.github.io/Mind/others/HMN-prototype-web.html

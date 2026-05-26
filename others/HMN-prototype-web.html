@@ -1,0 +1,2598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智慧项目看板 — 金蝶苍穹</title>
+  <style>
+    :root {
+      --primary: #0052D9;
+      --primary-dark: #003EB3;
+      --primary-light: #EBF2FF;
+      --success: #00A870;
+      --warning: #ED7B2F;
+      --danger: #E34D59;
+      --text-primary: #1D2129;
+      --text-secondary: #4E5969;
+      --text-muted: #86909C;
+      --bg-page: #F5F7FA;
+      --bg-card: #FFFFFF;
+      --border: #E5E6EB;
+      --sidebar-w: 240px;
+      --sidebar-collapsed-w: 64px;
+      --topbar-h: 56px;
+      --radius: 8px;
+      --shadow: 0 1px 3px rgba(0, 0, 0, .08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text-primary);
+      background: var(--bg-page);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* Layout */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: #001529;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 100;
+      transition: width .25s ease;
+    }
+
+    .sidebar.collapsed {
+      width: var(--sidebar-collapsed-w);
+    }
+
+    .sidebar.collapsed .logo-text {
+      display: none;
+    }
+
+    .sidebar.collapsed .sidebar-logo {
+      justify-content: center;
+      padding: 20px 12px;
+    }
+
+    .sidebar.collapsed .nav-group-title {
+      display: none;
+    }
+
+    .sidebar.collapsed .nav-item {
+      justify-content: center;
+      padding: 12px 0;
+      border-left: none;
+    }
+
+    .sidebar.collapsed .nav-item .nav-text,
+    .sidebar.collapsed .nav-item .badge {
+      display: none;
+    }
+
+    .sidebar.collapsed .nav-item.active {
+      border-radius: 6px;
+      margin: 0 8px;
+      border-left: none;
+    }
+
+    .sidebar.collapsed .sidebar-footer {
+      justify-content: center;
+      padding: 14px 12px;
+    }
+
+    .sidebar.collapsed .sidebar-footer .user-info {
+      display: none;
+    }
+
+    .sidebar-toggle {
+      position: absolute;
+      top: 14px;
+      right: -14px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      border: 2px solid #001529;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      z-index: 101;
+      transition: transform .25s ease;
+    }
+
+    .sidebar.collapsed .sidebar-toggle {
+      transform: rotate(180deg);
+    }
+
+    @media (hover: hover) {
+      .sidebar-toggle:hover {
+        background: var(--primary-dark);
+      }
+    }
+
+    .sidebar-logo {
+      padding: 20px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-logo .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--primary);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .sidebar-logo .logo-text {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: .5px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 12px 0;
+      overflow-y: auto;
+    }
+
+    .nav-group {
+      margin-bottom: 8px;
+    }
+
+    .nav-group-title {
+      padding: 8px 24px;
+      font-size: 11px;
+      color: rgba(255, 255, 255, .35);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 24px;
+      color: rgba(255, 255, 255, .65);
+      cursor: pointer;
+      transition: all .15s;
+      font-size: 14px;
+      border-left: 3px solid transparent;
+      white-space: nowrap;
+    }
+
+    .nav-item svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      opacity: .7;
+    }
+
+    .nav-item:hover svg,
+    .nav-item.active svg {
+      opacity: 1;
+    }
+
+    .nav-item .nav-text {
+      overflow: hidden;
+    }
+
+    .nav-item .badge {
+      margin-left: auto;
+      background: var(--danger);
+      color: #fff;
+      font-size: 11px;
+      padding: 1px 7px;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+
+    .nav-item:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, .06);
+    }
+
+    .nav-item.active {
+      color: #fff;
+      background: var(--primary);
+      border-left-color: #fff;
+    }
+
+    .sidebar-footer {
+      padding: 16px 24px;
+      border-top: 1px solid rgba(255, 255, 255, .08);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-footer .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .sidebar-footer .user-info {
+      flex: 1;
+    }
+
+    .sidebar-footer .user-name {
+      font-size: 13px;
+    }
+
+    .sidebar-footer .user-role {
+      font-size: 11px;
+      color: rgba(255, 255, 255, .4);
+    }
+
+    /* Topbar */
+    .topbar {
+      height: var(--topbar-h);
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .topbar-breadcrumb {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .topbar-breadcrumb span {
+      color: var(--primary);
+    }
+
+    .topbar-actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .topbar-actions .btn {
+      padding: 6px 16px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text-primary);
+      transition: all .15s;
+    }
+
+    .topbar-actions .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .topbar-actions .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .topbar-actions .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: var(--bg-page);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      position: relative;
+    }
+
+    .icon-btn .dot {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 8px;
+      height: 8px;
+      background: var(--danger);
+      border-radius: 50%;
+      border: 2px solid #fff;
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      transition: margin-left .25s ease;
+    }
+
+    .content-body {
+      padding: 24px;
+      max-width: 1440px;
+    }
+
+    /* KPI Section Header */
+    .kpi-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .kpi-section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .kpi-section-title h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .kpi-section-title .update-time {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .kpi-section-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .kpi-section-actions .btn-outline {
+      padding: 6px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text-secondary);
+      transition: all .15s;
+    }
+
+    .kpi-section-actions .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .kpi-section-actions .btn-outline.primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .kpi-section-actions .btn-outline.primary:hover {
+      background: var(--primary-dark);
+    }
+
+    /* KPI Cards v2 */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+      transition: all .25s ease;
+      cursor: pointer;
+    }
+
+    .kpi-card:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, .1);
+    }
+
+    .kpi-card.selected {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(0, 82, 217, .15);
+    }
+
+    .kpi-card .kpi-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .kpi-card .kpi-icon svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .kpi-card .kpi-icon.blue {
+      background: #EBF2FF;
+    }
+
+    .kpi-card .kpi-icon.blue svg {
+      color: var(--primary);
+    }
+
+    .kpi-card .kpi-icon.green {
+      background: #E8F8F2;
+    }
+
+    .kpi-card .kpi-icon.green svg {
+      color: var(--success);
+    }
+
+    .kpi-card .kpi-icon.orange {
+      background: #FFF3E8;
+    }
+
+    .kpi-card .kpi-icon.orange svg {
+      color: var(--warning);
+    }
+
+    .kpi-card .kpi-icon.red {
+      background: #FDECEE;
+    }
+
+    .kpi-card .kpi-icon.red svg {
+      color: var(--danger);
+    }
+
+    .kpi-card .kpi-title {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .kpi-card .kpi-body {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .kpi-card .kpi-value {
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .kpi-card .kpi-value.blue {
+      color: var(--primary);
+    }
+
+    .kpi-card .kpi-value.green {
+      color: var(--success);
+    }
+
+    .kpi-card .kpi-value.orange {
+      color: var(--warning);
+    }
+
+    .kpi-card .kpi-value.red {
+      color: var(--danger);
+    }
+
+    .kpi-card .kpi-footer {
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .kpi-card .kpi-footer.up {
+      color: var(--success);
+    }
+
+    .kpi-card .kpi-footer.warn {
+      color: var(--warning);
+    }
+
+    .kpi-card .kpi-footer.danger {
+      color: var(--danger);
+    }
+
+    .kpi-card .kpi-footer.neutral {
+      color: var(--text-muted);
+    }
+
+    /* Section */
+    .section {
+      background: var(--bg-card);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .section:hover {
+      box-shadow: 0 2px 12px rgba(0, 0, 0, .1);
+    }
+
+    .section-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .section-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .section-body {
+      padding: 20px;
+    }
+
+    /* Collapse */
+    .section.collapsed .section-body {
+      display: none;
+    }
+
+    .collapse-btn {
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-muted);
+      transition: transform .2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: none;
+      background: none;
+      margin-right: 4px;
+    }
+
+    .collapse-btn:hover {
+      background: var(--bg-page);
+      color: var(--text-primary);
+    }
+
+    .section.collapsed .collapse-btn {
+      transform: rotate(-90deg);
+    }
+
+    /* Floating Nav */
+    .float-nav {
+      position: fixed;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 900;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      background: var(--bg-card);
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .08);
+      padding: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .float-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--text-muted);
+      transition: all .15s;
+      white-space: nowrap;
+    }
+
+    .float-nav-item:hover {
+      background: var(--bg-page);
+      color: var(--text-primary);
+    }
+
+    .float-nav-item.active {
+      background: #EBF2FF;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .float-nav-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: all .2s;
+      flex-shrink: 0;
+    }
+
+    .float-nav-item.active .float-nav-dot {
+      background: var(--primary);
+      width: 9px;
+      height: 9px;
+    }
+
+    @media (max-width: 1400px) {
+      .float-nav {
+        right: 4px;
+      }
+
+      .float-nav-item span {
+        display: none;
+      }
+
+      .float-nav-item {
+        padding: 8px;
+      }
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    .tab {
+      padding: 8px 20px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all .15s;
+      font-weight: 500;
+    }
+
+    .tab:hover {
+      color: var(--primary);
+    }
+
+    .tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    /* Stepper v2 — 大圆形节点 */
+    .stepper {
+      display: flex;
+      align-items: flex-start;
+      margin: 16px 0;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      position: relative;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 10px;
+      transition: all .25s ease;
+    }
+
+    .step:hover {}
+
+    .step.active-step {}
+
+    .step-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      border: 2.5px solid var(--border);
+      background: #fff;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      transition: all .3s ease;
+    }
+
+    .step.done .step-circle {
+      background: var(--success);
+      border-color: var(--success);
+      color: #fff;
+    }
+
+    .step.current .step-circle {
+      background: var(--warning);
+      border-color: var(--warning);
+      color: #fff;
+    }
+
+    .step.current .step-circle {
+      animation: pulse-glow 2s infinite;
+    }
+
+    @keyframes pulse-glow {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(237, 123, 47, .4);
+      }
+
+      50% {
+        box-shadow: 0 0 0 10px rgba(237, 123, 47, 0);
+      }
+    }
+
+    .step.pending .step-circle {
+      background: #E8ECF1;
+      border-color: #E8ECF1;
+      color: var(--text-secondary);
+    }
+
+    /* 选中态 */
+    .step.active-step .step-circle {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 82, 217, .25), 0 0 0 6px rgba(0, 82, 217, .08);
+      transform: scale(1.12);
+    }
+
+    .step.active-step.done .step-circle {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .step.active-step.current .step-circle {
+      background: var(--primary);
+      color: #fff;
+      animation: none;
+    }
+
+    .step.active-step.pending .step-circle {
+      background: #E8ECF1;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .step-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-align: center;
+      white-space: nowrap;
+      transition: all .25s ease;
+    }
+
+    .step.done .step-label {
+      color: var(--success);
+    }
+
+    .step.current .step-label {
+      color: var(--warning);
+    }
+
+    .step.active-step .step-label {
+      color: var(--primary-dark);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .step-status {
+      font-size: 11px;
+      text-align: center;
+      white-space: nowrap;
+      transition: all .25s ease;
+    }
+
+    .step.done .step-status {
+      color: var(--success);
+    }
+
+    .step.current .step-status {
+      color: var(--warning);
+    }
+
+    .step.pending .step-label {
+      color: var(--text-muted);
+    }
+
+    .step.pending .step-status {
+      color: var(--text-muted);
+    }
+
+    .step.active-step .step-status {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .step-line {
+      flex: 1;
+      height: 2px;
+      margin-top: 18px;
+      border-radius: 2px;
+      transition: background .3s;
+      min-width: 24px;
+    }
+
+    .step-line.bg-gray {
+      background: var(--border);
+    }
+
+    .step-line.bg-green {
+      background: var(--success);
+    }
+
+    .step-line.bg-gradient {
+      background: linear-gradient(90deg, var(--success) 0%, var(--warning) 100%);
+    }
+
+    /* Progress Bar */
+    .progress-bar {
+      height: 8px;
+      background: var(--bg-page);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width .3s;
+    }
+
+    .progress-fill.blue {
+      background: var(--primary);
+    }
+
+    .progress-fill.green {
+      background: var(--success);
+    }
+
+    .progress-fill.orange {
+      background: var(--warning);
+    }
+
+    .progress-fill.red {
+      background: var(--danger);
+    }
+
+    /* Table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table th {
+      text-align: left;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-page);
+      white-space: nowrap;
+    }
+
+    .data-table th .filter-icon {
+      cursor: pointer;
+      opacity: .3;
+      vertical-align: middle;
+      transition: opacity .15s;
+    }
+
+    .data-table th .filter-icon:hover {
+      opacity: .7;
+    }
+
+    .data-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .data-table tr:hover td {
+      background: var(--primary-light);
+    }
+
+    .data-table .tree-toggle {
+      cursor: pointer;
+      color: var(--primary);
+      font-weight: 700;
+      width: 20px;
+      display: inline-block;
+    }
+
+    .data-table .child-row td:first-child {
+      padding-left: 36px;
+    }
+
+    .data-table .btn-link {
+      color: var(--text-muted);
+      cursor: pointer;
+      background: var(--bg-page);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 4px;
+      transition: all .15s;
+      white-space: nowrap;
+    }
+
+    .data-table .btn-link:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, .45);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #fff;
+      border-radius: 14px;
+      width: 720px;
+      max-height: 80vh;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, .15);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: var(--bg-page);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--text-muted);
+      transition: all .15s;
+    }
+
+    .modal-close:hover {
+      background: #E5E6EB;
+      color: var(--text-primary);
+    }
+
+    .modal-body {
+      padding: 20px 24px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* Tags */
+    .tag {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .tag-green {
+      background: #E8F8F2;
+      color: var(--success);
+    }
+
+    .tag-orange {
+      background: #FFF3E8;
+      color: var(--warning);
+    }
+
+    .tag-red {
+      background: #FDECEE;
+      color: var(--danger);
+    }
+
+    .tag-blue {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .tag-default {
+      background: var(--bg-page);
+      color: var(--text-muted);
+    }
+
+    /* Pagination */
+    .table-footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      padding: 0 0 12px 0;
+    }
+
+    .pagination {
+      display: flex;
+      gap: 4px;
+    }
+
+    .page-btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text-secondary);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .page-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .page-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .page-btn:disabled {
+      opacity: .4;
+      cursor: default;
+    }
+
+    /* Alert List */
+    .alert-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .alert-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      background: #FFF3E8;
+      border-left: 3px solid var(--warning);
+    }
+
+    .alert-item.critical {
+      background: #FDECEE;
+      border-left-color: var(--danger);
+    }
+
+    .alert-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .alert-content {
+      flex: 1;
+    }
+
+    .alert-title {
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .alert-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .alert-action {
+      color: var(--primary);
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Two Column Grid */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* Dimension Card */
+    .dim-meta {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 16px;
+    }
+
+    .dim-stat {
+      text-align: center;
+      flex: 1;
+    }
+
+    .dim-stat .val {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .dim-stat .lbl {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .kpi-section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <button class="sidebar-toggle" title="展开/收起">
+        <svg width="12" height="12" viewBox="0 0 12 12">
+          <path d="M8 2L4 6l4 4" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </button>
+      <div class="sidebar-logo">
+        <div class="logo-icon">智</div>
+        <div class="logo-text">智慧项目看板</div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-group">
+          <div class="nav-group-title">项目监控</div>
+          <div class="nav-item active">
+            <svg viewBox="0 0 18 18" fill="none">
+              <rect x="1" y="1" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" />
+              <rect x="10" y="1" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" />
+              <rect x="1" y="10" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" />
+              <rect x="10" y="10" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" />
+            </svg>
+            <span class="nav-text">项目总览</span>
+          </div>
+          <!-- <div class="nav-item"> -->
+          <!-- <svg viewBox="0 0 18 18" fill="none">
+              <path d="M3 4h12M3 9h12M3 14h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              <circle cx="14.5" cy="14" r="3" stroke="currentColor" stroke-width="1.5" />
+            </svg> -->
+          <!-- <span class="nav-text">合同执行</span><span class="badge">3</span> -->
+          <!-- </div> -->
+          <!-- <div class="nav-item"> -->
+          <!-- <svg viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="7.5" stroke="currentColor" stroke-width="1.5" /><text x="9" y="13"
+                text-anchor="middle" font-size="11" fill="currentColor">¥</text>
+            </svg> -->
+          <!-- <span class="nav-text">收入分析</span> -->
+          <!-- </div> -->
+        </div>
+        <!-- <div class="nav-group"> -->
+        <!-- <div class="nav-group-title">风险管理</div> -->
+        <!-- <div class="nav-item">
+          <svg viewBox="0 0 18 18" fill="none">
+            <path d="M9 1.5L16.5 15H1.5L9 1.5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+            <line x1="9" y1="7" x2="9" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            <circle cx="9" cy="13.5" r="0.8" fill="currentColor" />
+          </svg>
+           <span class="nav-text">风险预警</span><span class="badge">5</span> 
+  </div> -->
+        <!-- <div class="nav-item">
+          <svg viewBox="0 0 18 18" fill="none">
+            <polyline points="1,14 6,8 10,11 17,3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <circle cx="17" cy="3" r="1.2" fill="currentColor" />
+          </svg>
+           <span class="nav-text">趋势分析</span>
+        </div> -->
+        <!-- </div> -->
+        <!-- <div class="nav-group">
+          <div class="nav-group-title">数据报表</div>
+          <div class="nav-item">
+            <svg viewBox="0 0 18 18" fill="none">
+              <rect x="2" y="1.5" width="14" height="15" rx="1.5" stroke="currentColor" stroke-width="1.5" />
+              <line x1="5" y1="6" x2="13" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              <line x1="5" y1="10" x2="13" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              <line x1="5" y1="14" x2="10" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+            <span class="nav-text">项目报表</span>
+          </div>
+          <div class="nav-item">
+            <svg viewBox="0 0 18 18" fill="none">
+              <path d="M9 2v10M9 12l-4-4M9 12l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <line x1="3" y1="16" x2="15" y2="16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+            <span class="nav-text">数据导出</span>
+          </div>
+        </div> -->
+      </nav>
+      <div class="sidebar-footer">
+        <div class="avatar">张</div>
+        <div class="user-info">
+          <div class="user-name">张经理</div>
+          <div class="user-role">项目经理</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="main-content">
+      <header class="topbar">
+        <div>
+          <div class="topbar-title">项目总览</div>
+          <div class="topbar-breadcrumb">智慧项目看板 / <span>项目总览</span></div>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-btn" style="position:relative">🔔<span class="dot"></span></button>
+          <!-- <select style="padding:6px 12px;border-radius:6px;border:1px solid var(--border);font-size:13px;color:var(--text-primary)">
+          <option>我负责的项目</option>
+          <option>我下属的项目</option>
+          <option>全部项目</option>
+        </select>
+        <button class="btn btn-primary">+ 新建项目</button>-->
+        </div>
+      </header>
+
+      <div class="content-body">
+
+        <!-- 项目总览 KPI 区域 -->
+        <div class="kpi-section-header" id="kpi-section">
+          <div class="kpi-section-title">
+            <h2>项目总览</h2>
+            <span class="update-time">⏱ 数据更新于 2026-05-21 09:30</span>
+          </div>
+          <div class="kpi-section-actions">
+            <button class="btn-outline" onclick="openProjectModal()">🔍 筛选</button>
+            <button class="btn-outline primary">🔄 更新最新情况</button>
+          </div>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi-card selected" onclick="filterProjects('active',this)">
+            <div class="kpi-icon blue"><svg viewBox="0 0 20 20" fill="none">
+                <rect x="2" y="2" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" />
+                <rect x="11" y="2" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" />
+                <rect x="2" y="11" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" />
+                <rect x="11" y="11" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" />
+              </svg></div>
+            <span class="kpi-title">在执行项目</span>
+            <div class="kpi-body"><span class="kpi-value blue">8</span></div>
+            <div class="kpi-footer up">↑ 较上月 +2</div>
+          </div>
+          <div class="kpi-card" onclick="filterProjects('done',this)">
+            <div class="kpi-icon green"><svg viewBox="0 0 20 20" fill="none">
+                <path d="M4 11l3.5 3.5L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg></div>
+            <span class="kpi-title">已完成项目</span>
+            <div class="kpi-body"><span class="kpi-value green">3</span></div>
+            <div class="kpi-footer up">本月完成 1</div>
+          </div>
+          <div class="kpi-card" onclick="filterProjects('warn',this)">
+            <div class="kpi-icon orange"><svg viewBox="0 0 20 20" fill="none">
+                <path d="M10 2l8 16H2L10 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                <line x1="10" y1="8" x2="10" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <circle cx="10" cy="15" r="1" fill="currentColor" />
+              </svg></div>
+            <span class="kpi-title">预警项目</span>
+            <div class="kpi-body"><span class="kpi-value orange">2</span></div>
+            <div class="kpi-footer warn">⚠ 需要关注</div>
+          </div>
+          <div class="kpi-card" onclick="filterProjects('overdue',this)">
+            <div class="kpi-icon red"><svg viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5" />
+                <line x1="10" y1="5" x2="10" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                <line x1="10" y1="10" x2="13" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              </svg></div>
+            <span class="kpi-title">超期项目</span>
+            <div class="kpi-body"><span class="kpi-value red">2</span></div>
+            <div class="kpi-footer danger">⚠ 需立即处理</div>
+          </div>
+        </div>
+
+        <!-- 项目列表 -->
+        <div class="section" id="project-list-section">
+          <div class="section-header">
+            <button class="collapse-btn" onclick="toggleProjectList()">▼</button>
+            <div class="section-title">项目列表</div>
+            <div class="section-actions">
+              <span style="font-size:12px;color:var(--text-muted);">共 <span id="project-count">4</span> 个项目</span>
+            </div>
+          </div>
+          <div class="section-body" style="padding:0;">
+            <div id="project-list-table"></div>
+          </div>
+        </div>
+
+        <!-- 四维 Tab 面板 -->
+        <div class="section" id="tracking-section">
+          <div class="section-header">
+            <div class="section-title">项目执行跟踪 · <span id="tracking-project-name">AAA智慧园区项目</span></div>
+            <div class="section-actions">
+              <select style="padding:6px 12px;border-radius:6px;border:1px solid var(--border);font-size:13px">
+                <option>AAA智慧园区项目</option>
+                <option>BBB智能制造项目</option>
+                <option>CCC数字化工厂</option>
+              </select>
+            </div>
+          </div>
+          <div class="section-body">
+            <div class="tabs" id="dimension-tabs">
+              <div class="tab active" data-tab="sales" onclick="switchTab('sales')">设备销售</div>
+              <div class="tab" data-tab="purchase" onclick="switchTab('purchase')">设备采购</div>
+              <div class="tab" data-tab="service" onclick="switchTab('service')">服务类采购</div>
+            </div>
+
+            <!-- 设备销售 Tab -->
+            <div id="tab-sales" class="tab-content">
+
+              <!-- 设备销售维度 -->
+              <div class="dim-meta">
+                <div class="dim-stat">
+                  <div class="val">4</div>
+                  <div class="lbl">订单数</div>
+                </div>
+                <div class="dim-stat">
+                  <div class="val">100/100</div>
+                  <div class="lbl">订单完成</div>
+                </div>
+                <div class="dim-stat">
+                  <div class="val">1,000万</div>
+                  <div class="lbl">合同总额</div>
+                </div>
+                <div class="dim-stat">
+                  <div class="val" style="color:var(--success)">100%</div>
+                  <div class="lbl">发货率</div>
+                </div>
+              </div>
+
+              <!-- 进度条 -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0;">
+                <div>
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+                    <span style="font-size:13px;font-weight:500;color:var(--text-secondary);">发货进度</span>
+                    <span style="font-size:14px;font-weight:700;color:var(--success);">100%</span>
+                  </div>
+                  <div class="progress-bar" style="height:8px;">
+                    <div class="progress-fill green" style="width:100%;"></div>
+                  </div>
+                  <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">已出库 130 / 总计 130</div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+                    <span style="font-size:13px;font-weight:500;color:var(--text-secondary);">回款进度</span>
+                    <span style="font-size:14px;font-weight:700;color:var(--warning);">30%</span>
+                  </div>
+                  <div class="progress-bar" style="height:8px;">
+                    <div class="progress-fill orange" style="width:30%;"></div>
+                  </div>
+                  <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">已回款 ¥300万 / ¥1,000万</div>
+                </div>
+              </div>
+
+              <div style="border-top:1px solid var(--border);margin:8px 0;"></div>
+
+              <!-- 流程 Stepper -->
+              <div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">销售流程节点 <span
+                  style="font-size:11px;">（点击节点查看明细）</span></div>
+              <div class="stepper" id="sales-stepper">
+                <div class="step done active-step" data-step="1" onclick="showStepData(1)">
+                  <div class="step-circle">✓</div>
+                  <div class="step-label">销售订单</div>
+                  <div class="step-status">4/4 完成</div>
+                </div>
+                <div class="step-line bg-green"></div>
+                <div class="step done" data-step="2" onclick="showStepData(2)">
+                  <div class="step-circle">✓</div>
+                  <div class="step-label">发货通知</div>
+                  <div class="step-status">4/4 完成</div>
+                </div>
+                <div class="step-line bg-green"></div>
+                <div class="step done" data-step="3" onclick="showStepData(3)">
+                  <div class="step-circle">✓</div>
+                  <div class="step-label">销售出库</div>
+                  <div class="step-status">4/4 完成</div>
+                </div>
+                <div class="step-line bg-gradient"></div>
+                <div class="step current" data-step="4" onclick="showStepData(4)">
+                  <div class="step-circle">4</div>
+                  <div class="step-label">财务应收</div>
+                  <div class="step-status">3/4 开票</div>
+                </div>
+                <div class="step-line bg-gray"></div>
+                <div class="step pending" data-step="5" onclick="showStepData(5)">
+                  <div class="step-circle">5</div>
+                  <div class="step-label">收款</div>
+                  <div class="step-status">950/1,000万</div>
+                </div>
+              </div>
+
+              <div style="border-top:1px solid var(--border);margin:12px 0 0 0;"></div>
+
+              <!-- 动态明细表 -->
+              <div id="step-detail-table" style="margin-top:16px;"></div>
+
+            </div><!-- /tab-sales -->
+
+            <!-- 设备采购 Tab -->
+            <div id="tab-purchase" class="tab-content" style="display:none;">
+              <div class="dim-meta">
+                <div class="dim-stat">
+                  <div class="val">5</div>
+                  <div class="lbl">采购单数</div>
+                </div>
+                <div class="dim-stat">
+                  <div class="val">80/100</div>
+                  <div class="lbl">订单完成</div>
+                </div>
+                <div class="dim-stat">
+                  <div class="val">800万</div>
+                  <div class="lbl">采购总额</div>
+                </div>
+                <div class="dim-stat">
+                  <div class="val" style="color:var(--warning)">80%</div>
+                  <div class="lbl">入库率</div>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0;">
+                <div>
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+                    <span style="font-size:13px;font-weight:500;color:var(--text-secondary);">采购进度</span>
+                    <span style="font-size:14px;font-weight:700;color:var(--warning);">75%</span>
+                  </div>
+                  <div class="progress-bar" style="height:8px;">
+                    <div class="progress-fill orange" style="width:75%;"></div>
+                  </div>
+                  <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">已下单 3 / 总计 4 单</div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+                    <span style="font-size:13px;font-weight:500;color:var(--text-secondary);">付款进度</span>
+                    <span style="font-size:14px;font-weight:700;color:var(--danger);">50%</span>
+                  </div>
+                  <div class="progress-bar" style="height:8px;">
+                    <div class="progress-fill red" style="width:50%;"></div>
+                  </div>
+                  <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">已付 ¥400万 / ¥800万</div>
+                </div>
+              </div>
+
+              <div style="border-top:1px solid var(--border);margin:8px 0;"></div>
+
+              <div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">采购流程节点 <span
+                  style="font-size:11px;">（点击节点查看明细）</span></div>
+              <div class="stepper" id="purchase-stepper">
+                <div class="step done active-step" data-step="1" onclick="showPurchaseStepData(1)">
+                  <div class="step-circle">✓</div>
+                  <div class="step-label">采购申请</div>
+                  <div class="step-status">5/5 完成</div>
+                </div>
+                <div class="step-line bg-green"></div>
+                <div class="step done" data-step="2" onclick="showPurchaseStepData(2)">
+                  <div class="step-circle">✓</div>
+                  <div class="step-label">采购订单</div>
+                  <div class="step-status">3/4 下单</div>
+                </div>
+                <div class="step-line bg-green"></div>
+                <div class="step current" data-step="3" onclick="showPurchaseStepData(3)">
+                  <div class="step-circle">3</div>
+                  <div class="step-label">收货</div>
+                  <div class="step-status">2/3 已收</div>
+                </div>
+                <div class="step-line bg-gradient"></div>
+                <div class="step pending" data-step="4" onclick="showPurchaseStepData(4)">
+                  <div class="step-circle">4</div>
+                  <div class="step-label">入库</div>
+                  <div class="step-status">0/3</div>
+                </div>
+                <div class="step-line bg-gray"></div>
+                <div class="step pending" data-step="5" onclick="showPurchaseStepData(5)">
+                  <div class="step-circle">5</div>
+                  <div class="step-label">财务应付</div>
+                  <div class="step-status">0/4</div>
+                </div>
+                <div class="step-line bg-gray"></div>
+                <div class="step pending" data-step="6" onclick="showPurchaseStepData(6)">
+                  <div class="step-circle">6</div>
+                  <div class="step-label">付款申请</div>
+                  <div class="step-status">0/4</div>
+                </div>
+                <div class="step-line bg-gray"></div>
+                <div class="step pending" data-step="7" onclick="showPurchaseStepData(7)">
+                  <div class="step-circle">7</div>
+                  <div class="step-label">付款</div>
+                  <div class="step-status">¥400/800万</div>
+                </div>
+              </div>
+
+              <div style="border-top:1px solid var(--border);margin:12px 0 0 0;"></div>
+              <div id="purchase-detail-table" style="margin-top:16px;"></div>
+            </div><!-- /tab-purchase -->
+
+            <!-- 服务类采购 Tab -->
+            <div id="tab-service" class="tab-content" style="display:none;">
+              <div class="dim-meta">
+                <div class="dim-stat">
+                  <div class="val">3</div>
+                  <div class="lbl">服务单数</div>
+                </div>
+                <div class="dim-stat">
+                  <div class="val">60/100</div>
+                  <div class="lbl">服务进度</div>
+                </div>
+                <div class="dim-stat">
+                  <div class="val">400万</div>
+                  <div class="lbl">服务总额</div>
+                </div>
+                <div class="dim-stat">
+                  <div class="val" style="color:var(--warning)">60%</div>
+                  <div class="lbl">验收率</div>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0;">
+                <div>
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+                    <span style="font-size:13px;font-weight:500;color:var(--text-secondary);">服务进度</span>
+                    <span style="font-size:14px;font-weight:700;color:var(--warning);">60%</span>
+                  </div>
+                  <div class="progress-bar" style="height:8px;">
+                    <div class="progress-fill orange" style="width:60%;"></div>
+                  </div>
+                  <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">已完成 3 / 总计 5 项</div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+                    <span style="font-size:13px;font-weight:500;color:var(--text-secondary);">付款进度</span>
+                    <span style="font-size:14px;font-weight:700;color:var(--success);">40%</span>
+                  </div>
+                  <div class="progress-bar" style="height:8px;">
+                    <div class="progress-fill green" style="width:40%;"></div>
+                  </div>
+                  <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">已付 ¥160万 / ¥400万</div>
+                </div>
+              </div>
+
+              <div style="border-top:1px solid var(--border);margin:8px 0;"></div>
+
+              <div style="font-size:13px;color:var(--text-muted);margin-bottom:4px;">服务采购流程节点 <span
+                  style="font-size:11px;">（点击节点查看明细）</span></div>
+              <div class="stepper" id="service-stepper">
+                <div class="step done active-step" data-step="1" onclick="showServiceStepData(1)">
+                  <div class="step-circle">✓</div>
+                  <div class="step-label">采购申请</div>
+                  <div class="step-status">3/3 完成</div>
+                </div>
+                <div class="step-line bg-green"></div>
+                <div class="step done" data-step="2" onclick="showServiceStepData(2)">
+                  <div class="step-circle">✓</div>
+                  <div class="step-label">采购订单</div>
+                  <div class="step-status">3/3 完成</div>
+                </div>
+                <div class="step-line bg-green"></div>
+                <div class="step done" data-step="3" onclick="showServiceStepData(3)">
+                  <div class="step-circle">✓</div>
+                  <div class="step-label">分包合同</div>
+                  <div class="step-status">3/3 签署</div>
+                </div>
+                <div class="step-line bg-green"></div>
+                <div class="step current" data-step="4" onclick="showServiceStepData(4)">
+                  <div class="step-circle">4</div>
+                  <div class="step-label">进度验收</div>
+                  <div class="step-status">3/5 验收</div>
+                </div>
+                <div class="step-line bg-gradient"></div>
+                <div class="step pending" data-step="5" onclick="showServiceStepData(5)">
+                  <div class="step-circle">5</div>
+                  <div class="step-label">暂估应付</div>
+                  <div class="step-status">0/3</div>
+                </div>
+                <div class="step-line bg-gray"></div>
+                <div class="step pending" data-step="6" onclick="showServiceStepData(6)">
+                  <div class="step-circle">6</div>
+                  <div class="step-label">财务应付</div>
+                  <div class="step-status">0/3</div>
+                </div>
+                <div class="step-line bg-gray"></div>
+                <div class="step pending" data-step="7" onclick="showServiceStepData(7)">
+                  <div class="step-circle">7</div>
+                  <div class="step-label">付款申请</div>
+                  <div class="step-status">0/3</div>
+                </div>
+                <div class="step-line bg-gray"></div>
+                <div class="step pending" data-step="8" onclick="showServiceStepData(8)">
+                  <div class="step-circle">8</div>
+                  <div class="step-label">付款单</div>
+                  <div class="step-status">¥160/400万</div>
+                </div>
+              </div>
+
+              <div style="border-top:1px solid var(--border);margin:12px 0 0 0;"></div>
+              <div id="service-detail-table" style="margin-top:16px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Grid: CV Analysis + Risk Alert -->
+        <!-- CV 分析 -->
+        <div class="section" id="section-cv">
+          <div class="section-header">
+            <div class="section-title">项目采购CV分析 · <span class="project-name-label">AAA智慧园区项目</span></div>
+            <div class="section-actions" style="gap:12px;">
+              <div class="pagination"><button class="page-btn" disabled>‹</button><button
+                  class="page-btn active">1</button><button class="page-btn">2</button><button
+                  class="page-btn">›</button>
+              </div>
+              <button class="page-btn">📥 导出数据</button>
+            </div>
+          </div>
+          <div class="section-body">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>供应商 <svg class="filter-icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M1 2h10L7.5 6.5v3.5L4.5 8.5v-2L1 2z" stroke="currentColor" stroke-width="1.2"
+                        stroke-linejoin="round" />
+                    </svg></th>
+                  <th>原数量 <svg class="filter-icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M1 2h10L7.5 6.5v3.5L4.5 8.5v-2L1 2z" stroke="currentColor" stroke-width="1.2"
+                        stroke-linejoin="round" />
+                    </svg></th>
+                  <th>现数量 <svg class="filter-icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M1 2h10L7.5 6.5v3.5L4.5 8.5v-2L1 2z" stroke="currentColor" stroke-width="1.2"
+                        stroke-linejoin="round" />
+                    </svg></th>
+                  <th>原金额(万) <svg class="filter-icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M1 2h10L7.5 6.5v3.5L4.5 8.5v-2L1 2z" stroke="currentColor" stroke-width="1.2"
+                        stroke-linejoin="round" />
+                    </svg></th>
+                  <th>现金额(万) <svg class="filter-icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M1 2h10L7.5 6.5v3.5L4.5 8.5v-2L1 2z" stroke="currentColor" stroke-width="1.2"
+                        stroke-linejoin="round" />
+                    </svg></th>
+                  <th>数量变更 <svg class="filter-icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M1 2h10L7.5 6.5v3.5L4.5 8.5v-2L1 2z" stroke="currentColor" stroke-width="1.2"
+                        stroke-linejoin="round" />
+                    </svg></th>
+                  <th>金额变更 <svg class="filter-icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M1 2h10L7.5 6.5v3.5L4.5 8.5v-2L1 2z" stroke="currentColor" stroke-width="1.2"
+                        stroke-linejoin="round" />
+                    </svg></th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>ABB机器人</td>
+                  <td>50</td>
+                  <td>55</td>
+                  <td>500</td>
+                  <td>550</td>
+                  <td style="color:var(--warning)">+5</td>
+                  <td style="color:var(--danger)">+50万</td>
+                  <td><button class="btn-link" onclick="openCvModal(0)">查看明细</button></td>
+                </tr>
+                <tr>
+                  <td>基恩士</td>
+                  <td>40</td>
+                  <td>35</td>
+                  <td>200</td>
+                  <td>190</td>
+                  <td style="color:var(--success)">-5</td>
+                  <td style="color:var(--success)">-10万</td>
+                  <td><button class="btn-link" onclick="openCvModal(1)">查看明细</button></td>
+                </tr>
+                <tr>
+                  <td>西门子</td>
+                  <td>20</td>
+                  <td>25</td>
+                  <td>100</td>
+                  <td>120</td>
+                  <td style="color:var(--warning)">+5</td>
+                  <td style="color:var(--danger)">+20万</td>
+                  <td><button class="btn-link" onclick="openCvModal(2)">查看明细</button></td>
+                </tr>
+                <tr>
+                  <td>起帆电缆</td>
+                  <td>200</td>
+                  <td>180</td>
+                  <td>50</td>
+                  <td>45</td>
+                  <td style="color:var(--success)">-20</td>
+                  <td style="color:var(--success)">-5万</td>
+                  <td><button class="btn-link" onclick="openCvModal(3)">查看明细</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 项目Vendor -->
+        <div class="section" id="section-vendor">
+          <div class="section-header">
+            <div class="section-title">项目Vendor分析 · <span class="project-name-label">AAA智慧园区项目</span></div>
+            <div class="section-actions" style="gap:12px;">
+              <div class="pagination"><button class="page-btn" disabled>‹</button><button
+                  class="page-btn active">1</button><button class="page-btn">2</button><button
+                  class="page-btn">›</button></div>
+              <button class="page-btn">📥 导出数据</button>
+            </div>
+          </div>
+          <div class="section-body" style="padding:0;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>供应商编码 <svg class="filter-icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M1 2h10L7.5 6.5v3.5L4.5 8.5v-2L1 2z" stroke="currentColor" stroke-width="1.2"
+                        stroke-linejoin="round" />
+                    </svg></th>
+                  <th>供应商名称 <svg class="filter-icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M1 2h10L7.5 6.5v3.5L4.5 8.5v-2L1 2z" stroke="currentColor" stroke-width="1.2"
+                        stroke-linejoin="round" />
+                    </svg></th>
+                  <th>PO条目 <svg class="filter-icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M1 2h10L7.5 6.5v3.5L4.5 8.5v-2L1 2z" stroke="currentColor" stroke-width="1.2"
+                        stroke-linejoin="round" />
+                    </svg></th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>SUP-001</td>
+                  <td style="font-weight:500;">ABB机器人</td>
+                  <td>12</td>
+                  <td><button class="btn-link" onclick="openVendorModal(0)">查看明细</button></td>
+                </tr>
+                <tr>
+                  <td>SUP-002</td>
+                  <td style="font-weight:500;">基恩士</td>
+                  <td>8</td>
+                  <td><button class="btn-link" onclick="openVendorModal(1)">查看明细</button></td>
+                </tr>
+                <tr>
+                  <td>SUP-003</td>
+                  <td style="font-weight:500;">西门子</td>
+                  <td>5</td>
+                  <td><button class="btn-link" onclick="openVendorModal(2)">查看明细</button></td>
+                </tr>
+                <tr>
+                  <td>SUP-004</td>
+                  <td style="font-weight:500;">起帆电缆</td>
+                  <td>20</td>
+                  <td><button class="btn-link" onclick="openVendorModal(3)">查看明细</button></td>
+                </tr>
+                <tr>
+                  <td>SUP-005</td>
+                  <td style="font-weight:500;">施耐德电气</td>
+                  <td>15</td>
+                  <td><button class="btn-link" onclick="openVendorModal(4)">查看明细</button></td>
+                </tr>
+                <tr>
+                  <td>SUP-006</td>
+                  <td style="font-weight:500;">发那科</td>
+                  <td>10</td>
+                  <td><button class="btn-link" onclick="openVendorModal(5)">查看明细</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 风险预警 -->
+        <div class="section" id="section-risk">
+          <div class="section-header">
+            <div class="section-title">⚠️ 风险预警</div>
+            <div class="section-actions"><span class="tag tag-red">5 条预警</span></div>
+          </div>
+          <div class="section-body">
+            <div class="alert-list">
+              <div class="alert-item critical">
+                <div class="alert-icon">🔴</div>
+                <div class="alert-content">
+                  <div class="alert-title">AAA项目 · 采购订单CGDD-3超期未收货</div>
+                  <div class="alert-desc">预期2025-02-15完成，已超期15天</div>
+                </div>
+                <div class="alert-action">催办 →</div>
+              </div>
+              <div class="alert-item critical">
+                <div class="alert-icon">🔴</div>
+                <div class="alert-content">
+                  <div class="alert-title">BBB项目 · 销售回款严重滞后</div>
+                  <div class="alert-desc">合同额500万，回款仅120万(24%)</div>
+                </div>
+                <div class="alert-action">催办 →</div>
+              </div>
+              <div class="alert-item">
+                <div class="alert-icon">🟡</div>
+                <div class="alert-content">
+                  <div class="alert-title">CCC项目 · 服务验收超期</div>
+                  <div class="alert-desc">服务合同B验收节点已延期5天</div>
+                </div>
+                <div class="alert-action">催办 →</div>
+              </div>
+              <div class="alert-item">
+                <div class="alert-icon">🟡</div>
+                <div class="alert-content">
+                  <div class="alert-title">DDD项目 · 采购入库进度落后</div>
+                  <div class="alert-desc">已完成40/100，预计无法按期完成</div>
+                </div>
+                <div class="alert-action">催办 →</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 浮动导航 -->
+      <nav class="float-nav" id="float-nav">
+        <div class="float-nav-item" data-target="kpi-section"><span class="float-nav-dot"></span><span>项目总览</span></div>
+        <div class="float-nav-item" data-target="project-list-section"><span
+            class="float-nav-dot"></span><span>项目列表</span></div>
+        <div class="float-nav-item" data-target="tracking-section"><span class="float-nav-dot"></span><span>执行跟踪</span>
+        </div>
+        <div class="float-nav-item" data-target="section-cv"><span class="float-nav-dot"></span><span>CV分析</span></div>
+        <div class="float-nav-item" data-target="section-vendor"><span class="float-nav-dot"></span><span>Vendor</span>
+        </div>
+        <div class="float-nav-item" data-target="section-risk"><span class="float-nav-dot"></span><span>风险预警</span>
+        </div>
+      </nav>
+
+    </div>
+  </div>
+  </div>
+
+  <!-- 项目筛选模态框 -->
+  <div class="modal-overlay" id="project-modal" onclick="if(event.target===this)closeProjectModal()">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">选择执行跟踪项目</div>
+        <button class="modal-close" onclick="closeProjectModal()">✕</button>
+      </div>
+      <div class="modal-body" id="project-modal-body"></div>
+      <div style="padding:12px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px;">
+        <button class="page-btn" onclick="closeProjectModal()">取消</button>
+        <button class="page-btn" onclick="confirmProject()">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 明细模态框 -->
+  <div class="modal-overlay" id="detail-modal" onclick="if(event.target===this)closeModal()">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-title">单据明细</div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var sidebar = document.querySelector('.sidebar');
+      var main = document.querySelector('.main-content');
+      var toggle = document.querySelector('.sidebar-toggle');
+      if (toggle && sidebar) {
+        toggle.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var collapsed = sidebar.classList.toggle('collapsed');
+          main.style.marginLeft = collapsed ? '64px' : '240px';
+        });
+      }
+    })();
+
+    // 流程节点数据
+    var stepData = {
+      1: {
+        title: '销售订单',
+        header: ['销售订单', '订单号', '日期', '数量', '金额(万)', '进度', '状态'],
+        rows: [
+          ['销售订单 A', 'YSQD-1', '2025-01-01', '100 PCS', '600', '100/100', '<span class="tag tag-green">已完成</span>'],
+          ['销售订单 B', 'YSQD-2', '2025-02-15', '60 PCS', '400', '60/60', '<span class="tag tag-green">已完成</span>'],
+          ['销售订单 C', 'YSQD-3', '2025-03-10', '40 PCS', '300', '40/40', '<span class="tag tag-green">已完成</span>'],
+          ['销售订单 D', 'YSQD-4', '2025-04-20', '30 PCS', '200', '30/30', '<span class="tag tag-green">已完成</span>']
+        ]
+      },
+      2: {
+        title: '发货通知',
+        header: ['发货通知单', '订单来源', '发货日期', '数量', '物流状态', '进度', '状态'],
+        rows: [
+          ['FH-001', 'YSQD-1', '2025-01-20', '100 PCS', '已签收', '100/100', '<span class="tag tag-green">已完成</span>'],
+          ['FH-002', 'YSQD-2', '2025-03-01', '60 PCS', '已签收', '60/60', '<span class="tag tag-green">已完成</span>'],
+          ['FH-003', 'YSQD-3', '2025-04-01', '40 PCS', '已签收', '40/40', '<span class="tag tag-green">已完成</span>'],
+          ['FH-004', 'YSQD-4', '2025-05-10', '30 PCS', '已签收', '30/30', '<span class="tag tag-green">已完成</span>']
+        ]
+      },
+      3: {
+        title: '销售出库',
+        header: ['出库单号', '发货来源', '出库日期', '数量', '仓库', '进度', '状态'],
+        rows: [
+          ['CK-001', 'FH-001', '2025-01-22', '100 PCS', '天津仓', '100/100', '<span class="tag tag-green">已完成</span>'],
+          ['CK-002', 'FH-002', '2025-03-03', '60 PCS', '天津仓', '60/60', '<span class="tag tag-green">已完成</span>'],
+          ['CK-003', 'FH-003', '2025-04-03', '40 PCS', '天津仓', '40/40', '<span class="tag tag-green">已完成</span>'],
+          ['CK-004', 'FH-004', '2025-05-12', '30 PCS', '天津仓', '30/30', '<span class="tag tag-green">已完成</span>']
+        ]
+      },
+      4: {
+        title: '财务应收',
+        header: ['应收单', '出库来源', '开票日期', '数量', '金额(万)', '回款进度', '状态'],
+        rows: [
+          ['FP-001', 'CK-001', '2025-02-01', '100 PCS', '600', '600/600', '<span class="tag tag-green">已回款</span>'],
+          ['FP-002', 'CK-002', '2025-03-10', '60 PCS', '400', '400/400', '<span class="tag tag-green">已回款</span>'],
+          ['FP-003', 'CK-003', '2025-04-10', '40 PCS', '300', '300/300', '<span class="tag tag-green">已回款</span>'],
+          ['FP-004', 'CK-004', '2025-05-20', '30 PCS', '200', '0/200', '<span class="tag tag-orange">待开票</span>']
+        ]
+      },
+      5: {
+        title: '收款',
+        header: ['收款单号', '发票来源', '到账日期', '金额(万)', '收款方式', '回款率', '状态'],
+        rows: [
+          ['SK-001', 'FP-001', '2025-02-15', '600', '银行转账', '100%', '<span class="tag tag-green">已到账</span>'],
+          ['SK-002', 'FP-002', '2025-03-25', '400', '银行转账', '100%', '<span class="tag tag-green">已到账</span>'],
+          ['SK-003', 'FP-003', '2025-04-25', '300', '承兑汇票', '100%', '<span class="tag tag-green">已到账</span>'],
+          ['SK-004', 'FP-004', '—', '200', '待确认', '0%', '<span class="tag tag-red">未收款</span>']
+        ]
+      }
+    };
+
+    // Tab 切换
+    function switchTab(tab) {
+      document.querySelectorAll('#dimension-tabs .tab').forEach(function (t) { t.classList.remove('active'); });
+      document.querySelector('#dimension-tabs .tab[data-tab="' + tab + '"]').classList.add('active');
+      document.querySelectorAll('.tab-content').forEach(function (c) { c.style.display = 'none'; });
+      document.getElementById('tab-' + tab).style.display = '';
+    }
+
+    // 采购流程节点数据
+    var purchaseStepData = {
+      1: {
+        title: '采购申请',
+        header: ['采购申请单', '申请号', '日期', '物料', '数量', '金额(万)', '状态'],
+        rows: [
+          ['设备采购申请A', 'CGSQ-1', '2025-01-03', '工业机器人', '50 PCS', '500', '<span class="tag tag-green">已转订单</span>'],
+          ['设备采购申请B', 'CGSQ-2', '2025-01-03', '传感器模组', '40 PCS', '200', '<span class="tag tag-green">已转订单</span>'],
+          ['服务采购申请', 'FWSQ-1', '2025-01-10', '安装调试服务', '1项', '100', '<span class="tag tag-green">已转合同</span>'],
+          ['设备采购申请C', 'CGSQ-3', '2025-02-10', '控制柜', '20 PCS', '100', '<span class="tag tag-green">已转订单</span>'],
+          ['设备采购申请D', 'CGSQ-4', '2025-03-01', '电缆辅材', '200米', '50', '<span class="tag tag-green">已转订单</span>']
+        ]
+      },
+      2: {
+        title: '采购订单',
+        header: ['采购订单', '申请来源', '下单日期', '数量', '金额(万)', '进度', '状态'],
+        rows: [
+          ['CGDD-1', 'CGSQ-1', '2025-01-15', '50 PCS', '500', '50/50', '<span class="tag tag-green">已完成</span>'],
+          ['CGDD-2', 'CGSQ-2', '2025-01-20', '20 PCS', '200', '20/20', '<span class="tag tag-green">已完成</span>'],
+          ['CGDD-3', 'CGSQ-3', '2025-01-30', '10 PCS', '100', '10/20', '<span class="tag tag-red">异常A</span>']
+        ]
+      },
+      3: {
+        title: '收货',
+        header: ['收货单', '订单来源', '收货日期', '数量', '质检结果', '进度', '状态'],
+        rows: [
+          ['SH-001', 'CGDD-1', '2025-02-10', '30 PCS', '合格', '30/50', '<span class="tag tag-orange">部分收货</span>'],
+          ['SH-002', 'CGDD-2', '2025-02-20', '20 PCS', '合格', '20/20', '<span class="tag tag-green">已完成</span>'],
+        ]
+      },
+      4: {
+        title: '入库',
+        header: ['入库单', '收货来源', '入库日期', '数量', '仓库', '进度', '状态'],
+        rows: [
+          ['RK-001', 'SH-001', '—', '30 PCS', '天津仓', '0/30', '<span class="tag tag-orange">待入库</span>'],
+          ['RK-002', 'SH-002', '—', '20 PCS', '天津仓', '0/20', '<span class="tag tag-orange">待入库</span>'],
+        ]
+      },
+      5: {
+        title: '财务应付',
+        header: ['应付单', '入库来源', '确认日期', '金额(万)', '发票状态', '进度', '状态'],
+        rows: [
+          ['YF-001', 'RK-001', '—', '500', '未开票', '0/1', '<span class="tag tag-default">未确认</span>'],
+          ['YF-002', 'RK-002', '—', '200', '未开票', '0/1', '<span class="tag tag-default">未确认</span>'],
+        ]
+      },
+      6: {
+        title: '付款申请',
+        header: ['付款申请单', '应付来源', '申请日期', '金额(万)', '审批节点', '进度', '状态'],
+        rows: [
+          ['FKSQ-001', 'YF-001', '—', '500', '待发起', '0/1', '<span class="tag tag-default">未发起</span>'],
+          ['FKSQ-002', 'YF-002', '—', '200', '待发起', '0/1', '<span class="tag tag-default">未发起</span>'],
+        ]
+      },
+      7: {
+        title: '付款',
+        header: ['付款单', '申请来源', '付款日期', '金额(万)', '付款方式', '比例', '状态'],
+        rows: [
+          ['FK-001', 'FKSQ-001', '—', '500', '银行转账', '0%', '<span class="tag tag-default">待执行</span>'],
+          ['FK-002', 'FKSQ-002', '—', '200', '银行转账', '0%', '<span class="tag tag-default">待执行</span>'],
+        ]
+      }
+    };
+
+    function showPurchaseStepData(step) {
+      document.querySelectorAll('#purchase-stepper .step').forEach(function (el) {
+        el.classList.remove('active-step');
+        if (parseInt(el.getAttribute('data-step')) === step) {
+          el.classList.add('active-step');
+        }
+      });
+      var data = purchaseStepData[step];
+      var html = '<div class="table-footer"><div class="pagination"><button class="page-btn" disabled>‹</button><button class="page-btn active">1</button><button class="page-btn">2</button><button class="page-btn">3</button><button class="page-btn">›</button></div><button class="page-btn">📥 导出数据</button></div>';
+      html += '<table class="data-table"><thead><tr>';
+      data.header.forEach(function (h) { html += '<th>' + h + ' <svg class="filter-icon" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 2h10L7.5 6.5v3.5L4.5 8.5v-2L1 2z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></th>'; });
+      html += '<th>操作</th></tr></thead><tbody>';
+      data.rows.forEach(function (row, i) {
+        html += '<tr>';
+        row.forEach(function (cell) { html += '<td>' + cell + '</td>'; });
+        html += '<td><button class="btn-link" onclick="openModal(\'' + data.title + '\', ' + i + ')">查看明细</button></td></tr>';
+      });
+      html += '</tbody></table>';
+      document.getElementById('purchase-detail-table').innerHTML = html;
+    }
+
+    // 服务采购流程节点数据
+    var serviceStepData = {
+      1: {
+        title: '采购申请',
+        header: ['服务申请单', '申请号', '日期', '服务内容', '预算(万)', '状态'],
+        rows: [
+          ['设备安装调试', 'FWSQ-1', '2025-01-10', '工业机器人安装调试', '200', '<span class="tag tag-green">已转订单</span>'],
+          ['软件系统实施', 'FWSQ-2', '2025-02-01', 'MES系统实施服务', '120', '<span class="tag tag-green">已转订单</span>'],
+          ['技术培训服务', 'FWSQ-3', '2025-03-01', '操作人员培训', '80', '<span class="tag tag-green">已转订单</span>']
+        ]
+      },
+      2: {
+        title: '采购订单',
+        header: ['服务订单', '订单号', '日期', '供应商', '金额(万)', '进度', '状态'],
+        rows: [
+          ['安装调试服务', 'FWDD-1', '2025-01-15', 'ABB技术服务', '200', '已完成', '<span class="tag tag-green">已验收</span>'],
+          ['软件实施服务', 'FWDD-2', '2025-02-10', '用友实施团队', '120', '进行中', '<span class="tag tag-orange">实施中</span>'],
+          ['培训服务', 'FWDD-3', '2025-03-10', '金蝶培训中心', '80', '已完成', '<span class="tag tag-green">已验收</span>']
+        ]
+      },
+      3: {
+        title: '分包合同',
+        header: ['分包合同', '合同号', '签订日期', '分包商', '金额(万)', '进度', '状态'],
+        rows: [
+          ['安装分包合同', 'FBHT-001', '2025-01-20', 'ABB技术服务', '200', '签署完成', '<span class="tag tag-green">已生效</span>'],
+          ['实施分包合同', 'FBHT-002', '2025-02-15', '用友实施团队', '120', '签署完成', '<span class="tag tag-green">已生效</span>'],
+          ['培训分包合同', 'FBHT-003', '2025-03-15', '金蝶培训中心', '80', '签署完成', '<span class="tag tag-green">已生效</span>']
+        ]
+      },
+      4: {
+        title: '进度验收',
+        header: ['验收单', '合同来源', '验收日期', '验收内容', '验收结果', '进度', '状态'],
+        rows: [
+          ['YS-001', 'FBHT-001', '2025-03-01', '机器人安装调试', '合格', '1/1', '<span class="tag tag-green">已验收</span>'],
+          ['YS-002', 'FBHT-003', '2025-04-01', '操作培训', '合格', '1/1', '<span class="tag tag-green">已验收</span>'],
+          ['YS-003', 'FBHT-002', '2025-05-01', 'MES系统一期', '部分通过', '1/2', '<span class="tag tag-orange">进行中</span>']
+        ]
+      },
+      5: {
+        title: '暂估应付',
+        header: ['暂估单', '验收来源', '暂估日期', '金额(万)', '暂估依据', '进度', '状态'],
+        rows: [
+          ['ZG-001', 'YS-001', '—', '200', '验收合格', '0/1', '<span class="tag tag-default">待暂估</span>'],
+          ['ZG-002', 'YS-002', '—', '80', '验收合格', '0/1', '<span class="tag tag-default">待暂估</span>'],
+          ['ZG-003', 'YS-003', '—', '120', '部分验收', '0/1', '<span class="tag tag-default">待暂估</span>']
+        ]
+      },
+      6: {
+        title: '财务应付',
+        header: ['应付单', '暂估来源', '确认日期', '金额(万)', '发票', '进度', '状态'],
+        rows: [
+          ['YF-001', 'ZG-001', '—', '200', '未开票', '0/1', '<span class="tag tag-default">未确认</span>'],
+          ['YF-002', 'ZG-002', '—', '80', '未开票', '0/1', '<span class="tag tag-default">未确认</span>'],
+          ['YF-003', 'ZG-003', '—', '120', '未开票', '0/1', '<span class="tag tag-default">未确认</span>']
+        ]
+      },
+      7: {
+        title: '付款申请',
+        header: ['付款申请单', '应付来源', '申请日期', '金额(万)', '审批节点', '进度', '状态'],
+        rows: [
+          ['FKSQ-001', 'YF-001', '—', '200', '待发起', '0/1', '<span class="tag tag-default">未发起</span>'],
+          ['FKSQ-002', 'YF-002', '—', '80', '待发起', '0/1', '<span class="tag tag-default">未发起</span>'],
+          ['FKSQ-003', 'YF-003', '—', '120', '待发起', '0/1', '<span class="tag tag-default">未发起</span>']
+        ]
+      },
+      8: {
+        title: '付款单',
+        header: ['付款单', '申请来源', '付款日期', '金额(万)', '付款方式', '比例', '状态'],
+        rows: [
+          ['FK-001', 'FKSQ-001', '—', '200', '银行转账', '0%', '<span class="tag tag-default">待执行</span>'],
+          ['FK-002', 'FKSQ-002', '—', '80', '银行转账', '0%', '<span class="tag tag-default">待执行</span>'],
+          ['FK-003', 'FKSQ-003', '—', '120', '银行转账', '0%', '<span class="tag tag-default">待执行</span>']
+        ]
+      }
+    };
+
+    function showServiceStepData(step) {
+      document.querySelectorAll('#service-stepper .step').forEach(function (el) {
+        el.classList.remove('active-step');
+        if (parseInt(el.getAttribute('data-step')) === step) {
+          el.classList.add('active-step');
+        }
+      });
+      var data = serviceStepData[step];
+      var html = '<div class="table-footer"><div class="pagination"><button class="page-btn" disabled>‹</button><button class="page-btn active">1</button><button class="page-btn">2</button><button class="page-btn">3</button><button class="page-btn">›</button></div><button class="page-btn">📥 导出数据</button></div>';
+      html += '<table class="data-table"><thead><tr>';
+      data.header.forEach(function (h) { html += '<th>' + h + ' <svg class="filter-icon" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 2h10L7.5 6.5v3.5L4.5 8.5v-2L1 2z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></th>'; });
+      html += '<th>操作</th></tr></thead><tbody>';
+      data.rows.forEach(function (row, i) {
+        html += '<tr>';
+        row.forEach(function (cell) { html += '<td>' + cell + '</td>'; });
+        html += '<td><button class="btn-link" onclick="openModal(\'' + data.title + '\', ' + i + ')">查看明细</button></td></tr>';
+      });
+      html += '</tbody></table>';
+      document.getElementById('service-detail-table').innerHTML = html;
+    }
+
+    function showStepData(step) {
+      // 更新高亮
+      document.querySelectorAll('#sales-stepper .step').forEach(function (el) {
+        el.classList.remove('active-step');
+        if (parseInt(el.getAttribute('data-step')) === step) {
+          el.classList.add('active-step');
+        }
+      });
+
+      // 生成表格
+      var data = stepData[step];
+      var html = '<div class="table-footer"><div class="pagination"><button class="page-btn" disabled>‹</button><button class="page-btn active">1</button><button class="page-btn">2</button><button class="page-btn">3</button><button class="page-btn">›</button></div><button class="page-btn">📥 导出数据</button></div>';
+      html += '<table class="data-table"><thead><tr>';
+      data.header.forEach(function (h) { html += '<th>' + h + ' <svg class="filter-icon" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 2h10L7.5 6.5v3.5L4.5 8.5v-2L1 2z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></th>'; });
+      html += '<th>操作</th></tr></thead><tbody>';
+      data.rows.forEach(function (row, i) {
+        html += '<tr>';
+        row.forEach(function (cell) { html += '<td>' + cell + '</td>'; });
+        html += '<td><button class="btn-link" onclick="openModal(\'' + data.title + '\', ' + i + ')">查看明细</button></td></tr>';
+      });
+      html += '</tbody></table>';
+      document.getElementById('step-detail-table').innerHTML = html;
+    }
+
+    // 默认展示第一个节点数据
+    showStepData(1);
+    showPurchaseStepData(1);
+    showServiceStepData(1);
+
+    // 模态框
+    function openModal(title, index) {
+      document.getElementById('modal-title').textContent = title + ' — 分录明细';
+      var rows = [
+        ['物料编码', '物料名称', '规格型号', '数量', '单价(万)', '金额(万)'],
+        ['MAT-001', '工业机器人本体', 'IRB-4600', '10 PCS', '30', '300'],
+        ['MAT-002', '机器人控制柜', 'IRC5', '10 PCS', '15', '150'],
+        ['MAT-003', '示教器', 'FlexPendant', '10 PCS', '8', '80'],
+        ['MAT-004', '线缆套件', 'Cable-PRO', '10 PCS', '3', '30'],
+        ['MAT-005', '安装底座', 'Base-200', '10 PCS', '4', '40']
+      ];
+      var html = '<table class="data-table"><thead><tr>';
+      rows[0].forEach(function (h) { html += '<th>' + h + '</th>'; });
+      html += '</tr></thead><tbody>';
+      for (var i = 1; i < rows.length; i++) {
+        html += '<tr>';
+        rows[i].forEach(function (c) { html += '<td>' + c + '</td>'; });
+        html += '</tr>';
+      }
+      html += '<tr style="font-weight:700;background:var(--bg-page);"><td colspan="4" style="text-align:right;">合计</td><td>—</td><td>600</td></tr>';
+      html += '</tbody></table>';
+      document.getElementById('modal-body').innerHTML = html;
+      document.getElementById('detail-modal').classList.add('show');
+    }
+
+    // CV采购合同变更明细
+    var cvModalData = [
+      {
+        supplier: 'ABB机器人', items: [
+          ['MAT-001', '工业机器人本体', '50', '55', '500', '550', '+5', '+50万'],
+          ['MAT-011', '控制柜IRC5', '10', '10', '100', '100', '0', '0'],
+          ['MAT-021', '示教器', '10', '12', '80', '96', '+2', '+16万']
+        ]
+      },
+      {
+        supplier: '基恩士', items: [
+          ['MAT-031', '激光传感器', '20', '18', '100', '90', '-2', '-10万'],
+          ['MAT-032', '视觉模组', '20', '17', '100', '100', '-3', '0']
+        ]
+      },
+      {
+        supplier: '西门子', items: [
+          ['MAT-041', 'PLC控制器', '10', '12', '80', '96', '+2', '+16万'],
+          ['MAT-042', 'HMI触摸屏', '10', '13', '20', '24', '+3', '+4万']
+        ]
+      },
+      {
+        supplier: '起帆电缆', items: [
+          ['MAT-051', '动力电缆', '100m', '90m', '30', '27', '-10', '-3万'],
+          ['MAT-052', '控制电缆', '100m', '90m', '20', '18', '-10', '-2万']
+        ]
+      }
+    ];
+    function openCvModal(index) {
+      var d = cvModalData[index];
+      document.getElementById('modal-title').textContent = d.supplier + ' - 采购合同物料变更明细';
+      var html = '<table class="data-table"><thead><tr><th>物料编码' + f + '</th><th>物料名称' + f + '</th><th>原数量' + f + '</th><th>现数量' + f + '</th><th>原金额' + f + '</th><th>现金额' + f + '</th><th>数量变更' + f + '</th><th>金额变更' + f + '</th></tr></thead><tbody>';
+      d.items.forEach(function (row) {
+        html += '<tr>';
+        row.forEach(function (cell, j) {
+          var cls = '';
+          if (j >= 6 && cell.startsWith('+')) cls = ' style="color:var(--danger);font-weight:500;"';
+          else if (j >= 6 && cell.startsWith('-')) cls = ' style="color:var(--success);font-weight:500;"';
+          html += '<td' + cls + '>' + cell + '</td>';
+        });
+        html += '</tr>';
+      });
+      html += '</tbody></table>';
+      document.getElementById('modal-body').innerHTML = html;
+      document.getElementById('detail-modal').classList.add('show');
+    }
+
+    function closeModal() {
+      document.getElementById('detail-modal').classList.remove('show');
+    }
+    var f = ' <svg class="filter-icon" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 2h10L7.5 6.5v3.5L4.5 8.5v-2L1 2z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>';
+
+    // KPI卡片筛选项目列表
+    function filterProjects(type, el) {
+      document.querySelectorAll('.kpi-card').forEach(function (c) { c.classList.remove('selected'); });
+      el.classList.add('selected');
+      var projects = {
+        active: [
+          { id: '10008001A', name: 'SS06-传输测量链路设备租赁', phase: '采购入库', pct: '65%', cls: 'orange', date: '2025-05-30', status: '进行中', tag: 'tag-orange' },
+          { id: '10009001B', name: 'PEACE Somaliland Berbera Branch', phase: '财务应付', pct: '80%', cls: 'green', date: '2025-05-15', status: '进行中', tag: 'tag-green' },
+          { id: '10011001B', name: '中柬项目', phase: '采购订单', pct: '30%', cls: 'red', date: '2025-04-10', status: '已超期', tag: 'tag-red', bg: '#FFF0F0' },
+          { id: '10011003B', name: 'Sihanoukville-HK Cable-华为云', phase: '项目立项', pct: '15%', cls: 'blue', date: '2025-08-30', status: '刚启动', tag: 'tag-blue' },
+          { id: '10011005A', name: '中柬项目-关联交易-大陆侧许可', phase: '采购申请', pct: '45%', cls: 'orange', date: '2025-07-15', status: '进行中', tag: 'tag-orange' },
+          { id: '10011006A', name: '中柬项目-关联交易-国际侧DTS', phase: '采购订单', pct: '70%', cls: 'green', date: '2025-06-20', status: '进行中', tag: 'tag-green' },
+          { id: '10011007A', name: '中柬项目-关联交易-国内DTS', phase: '采购入库', pct: '55%', cls: 'green', date: '2025-06-30', status: '进行中', tag: 'tag-green' },
+          { id: '10011009A', name: 'Sihanoukville-HK Cable-Equipment', phase: '项目立项', pct: '10%', cls: 'blue', date: '2025-09-30', status: '刚启动', tag: 'tag-blue' }
+        ],
+        done: [
+          { id: '10008002A', name: 'SS07-数据中心建设', phase: '已验收', pct: '100%', cls: 'green', date: '2025-03-15', status: '已完成', tag: 'tag-green' },
+          { id: '10009002B', name: '新加坡节点扩容', phase: '已验收', pct: '100%', cls: 'green', date: '2025-04-20', status: '已完成', tag: 'tag-green' },
+          { id: '10011002B', name: '老挝骨干网升级', phase: '已验收', pct: '100%', cls: 'green', date: '2025-05-10', status: '已完成', tag: 'tag-green' }
+        ],
+        warn: [
+          { id: '10008003A', name: 'SS08-传输网优化', phase: '设备调试', pct: '75%', cls: 'orange', date: '2025-08-20', status: '进行中', tag: 'tag-orange' },
+          { id: '10009003B', name: '缅甸接入网建设', phase: '安装延期', pct: '60%', cls: 'orange', date: '2025-07-30', status: '延迟', tag: 'tag-orange', bg: '#FFF8F0' }
+        ],
+        overdue: [
+          { id: '10011001B', name: '中柬项目', phase: '采购订单', pct: '30%', cls: 'red', date: '2025-04-10', status: '已超期', tag: 'tag-red', bg: '#FFF0F0' },
+          { id: '10011004A', name: '越南海缆登陆站', phase: '土建停工', pct: '25%', cls: 'red', date: '2025-03-01', status: '已超期', tag: 'tag-red', bg: '#FFF0F0' }
+        ]
+      };
+      var list = projects[type];
+      var html = '<table class="data-table"><thead><tr><th>项目编号' + f + '</th><th>项目名称' + f + '</th><th>当前阶段' + f + '</th><th style="width:160px;">进度</th><th>计划完成' + f + '</th><th>状态' + f + '</th><th>操作</th></tr></thead><tbody>';
+      list.forEach(function (p) {
+        var style = p.bg ? ' style="background:' + p.bg + ';"' : '';
+        var color = 'var(--success)';
+        if (p.cls === 'orange') color = 'var(--warning)';
+        if (p.cls === 'red') color = 'var(--danger)';
+        if (p.cls === 'blue') color = 'var(--primary)';
+        html += '<tr' + style + '><td>' + p.id + '</td><td style="font-weight:500;">' + p.name + '</td><td>' + p.phase + '</td><td><div class="progress-bar" style="height:6px;"><div class="progress-fill ' + p.cls + '" style="width:' + p.pct + '"></div></div><span style="font-size:11px;color:' + color + ';">' + p.pct + '</span></td><td>' + p.date + '</td><td><span class="' + p.tag + '">' + p.status + '</span></td><td><button class="btn-link">执行跟踪</button></td></tr>';
+      });
+      html += '</tbody></table>';
+      document.getElementById('project-list-table').innerHTML = html;
+      document.getElementById('project-count').textContent = list.length;
+    }
+
+    // 初始加载
+    (function () {
+      var card = document.querySelector('.kpi-card');
+      if (card) filterProjects('active', card);
+    })();
+
+    // 项目列表折叠/展开
+    function toggleProjectList() {
+      document.getElementById('project-list-section').classList.toggle('collapsed');
+    }
+
+    // 项目筛选模态框（数据与filterProjects中的项目列表保持一致）
+    var allProjects = [
+      { id: '10008001A', name: 'SS06-传输测量链路设备租赁', phase: '采购入库', pct: '65%', cls: 'orange', date: '2025-05-30', status: '进行中', tag: 'tag-orange' },
+      { id: '10009001B', name: 'PEACE Somaliland Berbera Branch', phase: '财务应付', pct: '80%', cls: 'green', date: '2025-05-15', status: '进行中', tag: 'tag-green' },
+      { id: '10011001B', name: '中柬项目', phase: '采购订单', pct: '30%', cls: 'red', date: '2025-04-10', status: '已超期', tag: 'tag-red', bg: '#FFF0F0' },
+      { id: '10011003B', name: 'Sihanoukville-HK Cable-华为云', phase: '项目立项', pct: '15%', cls: 'blue', date: '2025-08-30', status: '刚启动', tag: 'tag-blue' },
+      { id: '10011005A', name: '中柬项目-关联交易-大陆侧许可', phase: '采购申请', pct: '45%', cls: 'orange', date: '2025-07-15', status: '进行中', tag: 'tag-orange' },
+      { id: '10011006A', name: '中柬项目-关联交易-国际侧DTS', phase: '采购订单', pct: '70%', cls: 'green', date: '2025-06-20', status: '进行中', tag: 'tag-green' },
+      { id: '10011007A', name: '中柬项目-关联交易-国内DTS', phase: '采购入库', pct: '55%', cls: 'green', date: '2025-06-30', status: '进行中', tag: 'tag-green' },
+      { id: '10011009A', name: 'Sihanoukville-HK Cable-Equipment', phase: '项目立项', pct: '10%', cls: 'blue', date: '2025-09-30', status: '刚启动', tag: 'tag-blue' }
+    ];
+
+    function openProjectModal() {
+      var html = '<table class="data-table"><thead><tr><th style="width:40px;"></th><th>项目编号' + f + '</th><th>项目名称' + f + '</th><th>当前阶段' + f + '</th><th style="width:140px;">进度</th><th>状态' + f + '</th></tr></thead><tbody>';
+      allProjects.forEach(function (p) {
+        var style = p.bg ? ' style="background:' + p.bg + ';"' : '';
+        var color = 'var(--success)';
+        if (p.cls === 'orange') color = 'var(--warning)';
+        if (p.cls === 'red') color = 'var(--danger)';
+        if (p.cls === 'blue') color = 'var(--primary)';
+        html += '<tr' + style + '><td><input type="radio" name="select-project" value="' + p.name + '"></td><td>' + p.id + '</td><td style="font-weight:500;">' + p.name + '</td><td>' + p.phase + '</td><td><div class="progress-bar" style="height:6px;"><div class="progress-fill ' + p.cls + '" style="width:' + p.pct + '"></div></div><span style="font-size:11px;color:' + color + ';">' + p.pct + '</span></td><td><span class="' + p.tag + '">' + p.status + '</span></td></tr>';
+      });
+      html += '</tbody></table>';
+      document.getElementById('project-modal-body').innerHTML = html;
+      document.getElementById('project-modal').classList.add('show');
+    }
+
+    function closeProjectModal() {
+      document.getElementById('project-modal').classList.remove('show');
+    }
+
+    function confirmProject() {
+      var selected = document.querySelector('input[name="select-project"]:checked');
+      if (!selected) { alert('请选择一个项目'); return; }
+      var name = selected.value;
+      // 更新所有项目名称标签
+      document.querySelectorAll('.project-name-label').forEach(function (el) { el.textContent = name; });
+      document.getElementById('tracking-project-name').textContent = name;
+      document.getElementById('project-list-section').classList.add('collapsed');
+      closeProjectModal();
+    }
+
+    // Vendor跟踪模态框
+    var vendorNames = ['ABB机器人', '基恩士', '西门子', '起帆电缆', '施耐德电气', '发那科'];
+
+    function openVendorModal(index) {
+      document.getElementById('modal-title').textContent = vendorNames[index] + ' - Vendor跟踪';
+      var html = '<div class="tabs" style="margin-bottom:16px;">' +
+        '<div class="tab active" onclick="showVendorTab(\'purchase\',this)">设备采购</div>' +
+        '<div class="tab" onclick="showVendorTab(\'service\',this)">服务采购</div>' +
+        '</div><div id="vendor-tab-content"></div>';
+      document.getElementById('modal-body').innerHTML = html;
+      document.getElementById('detail-modal').classList.add('show');
+      showVendorTab('purchase');
+    }
+
+    function showVendorTab(tab, el) {
+      if (el) {
+        document.querySelectorAll('#modal-body .tab').forEach(function (t) { t.classList.remove('active'); });
+        el.classList.add('active');
+      }
+      var data = tab === 'purchase' ? {
+        header: ['采购订单', '物料编码', '物料名称', '数量', '单价(万)', '金额(万)', '交货日期', '状态'],
+        rows: [
+          ['PO-001', 'MAT-001', '工业机器人本体', '10', '30', '300', '2025-03-15', '已交付'],
+          ['PO-002', 'MAT-011', '控制柜IRC5', '10', '15', '150', '2025-03-15', '已交付'],
+          ['PO-003', 'MAT-021', '示教器', '12', '8', '96', '2025-04-20', '部分交付'],
+          ['PO-004', 'MAT-004', '线缆套件', '10', '3', '30', '2025-05-10', '已交付'],
+          ['PO-005', 'MAT-005', '安装底座', '10', '4', '40', '2025-05-20', '待交付']
+        ]
+      } : {
+        header: ['服务合同', '服务内容', '开始日期', '结束日期', '金额(万)', '进度', '状态'],
+        rows: [
+          ['SC-001', '设备安装调试', '2025-02-01', '2025-04-30', '100', '90%', '进行中'],
+          ['SC-002', '系统集成测试', '2025-03-15', '2025-06-30', '80', '60%', '进行中'],
+          ['SC-003', '培训服务', '2025-05-01', '2025-06-15', '30', '0%', '未开始']
+        ]
+      };
+      var statusClass = {
+        '已交付': 'tag tag-green', '部分交付': 'tag tag-orange', '待交付': 'tag tag-default',
+        '进行中': 'tag tag-green', '未开始': 'tag tag-default'
+      };
+      var h = '<table class="data-table"><thead><tr>';
+      data.header.forEach(function (c) { h += '<th>' + c + '</th>'; });
+      h += '<th>操作</th></tr></thead><tbody>';
+      data.rows.forEach(function (r, ri) {
+        h += '<tr>';
+        r.forEach(function (c, ci) {
+          if (ci === r.length - 1) h += '<td><span class="' + (statusClass[c] || 'tag tag-default') + '">' + c + '</span></td>';
+          else h += '<td>' + c + '</td>';
+        });
+        h += '<td><button class="btn-link" onclick="openVendorRowProgress(\'' + tab + '\',' + ri + ')">查看进度</button></td></tr>';
+      });
+      h += '</tbody></table>';
+      document.getElementById('vendor-tab-content').innerHTML = h;
+    }
+
+    function openVendorRowProgress(tab, index) {
+      var steps = tab === 'purchase'
+        ? ['采购申请', '采购订单', '采购入库', '财务应付', '付款']
+        : ['采购申请', '采购订单', '分包合同', '分包进度验收', '财务应付', '付款'];
+      var names = tab === 'purchase'
+        ? ['PO-001 工业机器人本体', 'PO-002 控制柜IRC5', 'PO-003 示教器', 'PO-004 线缆套件', 'PO-005 安装底座']
+        : ['SC-001 设备安装调试', 'SC-002 系统集成测试', 'SC-003 培训服务'];
+      var title = (tab === 'purchase' ? '设备采购' : '服务采购') + ' - ' + names[index];
+      var curStep = Math.min(index + 2, steps.length);
+      var stepperHtml = '<div class="stepper">';
+      steps.forEach(function (s, i) {
+        var cls, icon, status, lineCls;
+        if (i < curStep - 1) {
+          cls = 'step done';
+          icon = '&#10003;';
+          status = '已完成';
+          lineCls = 'step-line bg-green';
+        } else if (i === curStep - 1) {
+          cls = 'step current';
+          icon = (i + 1);
+          status = '进行中';
+          lineCls = 'step-line bg-gradient';
+        } else {
+          cls = 'step pending';
+          icon = (i + 1);
+          status = '未开始';
+          lineCls = 'step-line bg-gray';
+        }
+        stepperHtml += '<div class="' + cls + '"><div class="step-circle">' + icon + '</div><div class="step-label">' + s + '</div><div class="step-status">' + status + '</div></div>';
+        if (i < steps.length - 1) stepperHtml += '<div class="' + lineCls + '"></div>';
+      });
+      stepperHtml += '</div>';
+      var sd = tab === 'purchase' ? [
+        { hdr: ['采购申请单', '物料编码', '物料名称', '数量', '预算(万)', '状态'], rws: [['CGSQ-0' + (index + 1), 'MAT-0' + (index + 1), names[index].split(' ')[1], (index + 1) * 10, (index + 1) * 30, '<span class="tag tag-green">已转订单</span>']] },
+        { hdr: ['采购订单', '物料编码', '物料名称', '数量', '单价(万)', '金额(万)', '状态'], rws: [['PO-0' + (index + 1), 'MAT-0' + (index + 1), names[index].split(' ')[1], (index + 1) * 10, 30, (index + 1) * 300, '<span class="tag tag-green">已完成</span>']] },
+        { hdr: ['入库单', '订单来源', '入库日期', '数量', '仓库', '状态'], rws: [['RK-0' + (index + 1), 'PO-0' + (index + 1), '2025-02-15', (index + 1) * 10, '天津仓', '<span class="tag tag-green">已入库</span>']] },
+        { hdr: ['应付单', '发票号', '金额(万)', '已付(万)', '状态'], rws: [['YF-0' + (index + 1), 'FP-0' + (index + 1), (index + 1) * 300, (index + 1) * 150, '<span class="tag tag-orange">部分付款</span>']] },
+        { hdr: ['付款单', '来源', '付款日期', '金额(万)', '付款方式', '状态'], rws: [['FK-0' + (index + 1), 'YF-0' + (index + 1), '2025-03-30', (index + 1) * 300, '银行转账', '<span class="tag tag-green">已完成</span>']] }
+      ] : [
+        { hdr: ['服务申请单', '申请号', '日期', '服务内容', '预算(万)', '状态'], rws: [['设备安装调试', 'FWSQ-' + (index + 1), '2025-01-10', names[index].split(' ')[1], (index + 1) * 50, '<span class="tag tag-green">已转合同</span>']] },
+        { hdr: ['采购订单', '供应商', '服务内容', '金额(万)', '开始', '结束', '状态'], rws: [['PO-S0' + (index + 1), 'ABB机器人', names[index].split(' ')[1], (index + 1) * 50, '2025-02-01', '2025-04-30', '<span class="tag tag-green">履行中</span>']] },
+        { hdr: ['分包合同', '采购订单', '分包商', '金额(万)', '签署日期', '状态'], rws: [['FC-0' + (index + 1), 'PO-S0' + (index + 1), '天津安装队', (index + 1) * 30, '2025-02-05', '<span class="tag tag-green">已签署</span>']] },
+        { hdr: ['验收单', '合同来源', '验收日期', '结果', '金额(万)', '状态'], rws: [['YS-0' + (index + 1), 'FC-0' + (index + 1), '2025-04-30', '验收通过', (index + 1) * 30, '<span class="tag tag-green">已完成</span>']] },
+        { hdr: ['应付单', '发票号', '金额(万)', '已付(万)', '状态'], rws: [['YF-S0' + (index + 1), 'FP-S0' + (index + 1), (index + 1) * 50, (index + 1) * 25, '<span class="tag tag-orange">部分付款</span>']] },
+        { hdr: ['付款单', '来源', '付款日期', '金额(万)', '方式', '状态'], rws: [['FK-S0' + (index + 1), 'YF-S0' + (index + 1), '2025-05-15', (index + 1) * 50, '银行转账', '<span class="tag tag-green">已完成</span>']] }
+      ];
+      var cur = sd[curStep - 1];
+      var tableHtml = '<table class="data-table"><thead><tr>';
+      cur.hdr.forEach(function (h) { tableHtml += '<th>' + h + '</th>'; });
+      tableHtml += '</tr></thead><tbody>';
+      cur.rws.forEach(function (row) {
+        tableHtml += '<tr>';
+        row.forEach(function (cell) { tableHtml += '<td>' + cell + '</td>'; });
+        tableHtml += '</tr>';
+      });
+      tableHtml += '</tbody></table>';
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-body').innerHTML = stepperHtml +
+        '<div style="font-size:13px;font-weight:600;color:var(--text-secondary);margin:16px 0 8px;">当前节点: ' + steps[curStep - 1] + '</div>' + tableHtml +
+        '<div style="text-align:left;padding-top:12px;"><button class="page-btn" onclick="backToVendorList(\'' + tab + '\')">← 返回列表</button></div>';
+    }
+
+    function backToVendorList(tab) {
+      document.getElementById('modal-title').textContent = document.getElementById('modal-title').textContent.split(' - ')[0] + ' - Vendor跟踪';
+      var html = '<div class="tabs" style="margin-bottom:16px;">' +
+        (tab === 'purchase'
+          ? '<div class="tab active" onclick="showVendorTab(\'purchase\',this)">设备采购</div><div class="tab" onclick="showVendorTab(\'service\',this)">服务采购</div>'
+          : '<div class="tab" onclick="showVendorTab(\'purchase\',this)">设备采购</div><div class="tab active" onclick="showVendorTab(\'service\',this)">服务采购</div>'
+        ) +
+        '</div><div id="vendor-tab-content"></div>';
+      document.getElementById('modal-body').innerHTML = html;
+      showVendorTab(tab);
+    }
+
+
+    // 浮动导航
+    (function () {
+      var nav = document.getElementById('float-nav');
+      if (!nav) return;
+      nav.addEventListener('click', function (e) {
+        var item = e.target.closest('.float-nav-item');
+        if (!item) return;
+        var target = document.getElementById(item.getAttribute('data-target'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      var items = nav.querySelectorAll('.float-nav-item');
+      var targets = [];
+      items.forEach(function (item) {
+        var el = document.getElementById(item.getAttribute('data-target'));
+        if (el) targets.push({ el: el, nav: item });
+      });
+      window.addEventListener('scroll', function () {
+        var scrollTop = window.scrollY + 100;
+        var active = null;
+        targets.forEach(function (t) {
+          if (t.el.offsetTop <= scrollTop) active = t.nav;
+        });
+        items.forEach(function (i) { i.classList.remove('active'); });
+        if (active) active.classList.add('active');
+      });
+    })();
+  </script>
+</body>
+
+</html>
