@@ -83,3 +83,8 @@ https://yacongliu.github.io/Mind/客户情况/中航直升机企业洞察报告.
 ### 华海智慧项目可视化
 https://yacongliu.github.io/Mind/others/HMN_智慧项目看板方案优化设计_v2.html
 https://yacongliu.github.io/Mind/others/HMN-prototype-web.html
+
+## 五、产品方案
+
+### AI套件
+https://yacongliu.github.io/Mind/产品方案/金蝶AI套件-打单速查手册.html
